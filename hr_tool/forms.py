@@ -10,7 +10,7 @@ class PivotTableForm(forms.Form):
         ('birth_year_month', '誕生日(年月)'),
         ('career_level', 'career level'),
         ('home_office', 'home_office'),
-        ('dte', 'DTE'),
+        ('DTE', 'DTE'),
         ('skill', 'skill'),
         ('join_year', '入社日(年)'),
         ('join_month', '入社日(月)'),

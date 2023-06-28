@@ -14,6 +14,7 @@ def detail(request, pk):
 
 # pivot table analysis page
 def analysis(request):
+    pivot_table = None
     if request.method == 'POST':
         form = PivotTableForm(request.POST)
         if form.is_valid():
@@ -27,8 +28,11 @@ def analysis(request):
             # create pivot table
             pivot_table = pd.pivot_table(df, values=value, index=row, columns=column, aggfunc=agg_func)
             # transform to the html
-            html = pivot_table.to_html()
-            return HttpResponse(html)
+            pivot_table = pivot_table.to_html()
     else:
         form = PivotTableForm()
-    return render(request, 'pivot_table.html', {'form': form})
+    context = {
+        'form': form,
+        'pivot_table': pivot_table
+    }
+    return render(request, 'pivot_table.html', context)

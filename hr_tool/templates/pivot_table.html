@@ -6,4 +6,14 @@
     {{ form }}
     <button type="submit">Analysis</button>
 </form>
+
+<div id="pivot-table-result">
+    {% if pivot_table %}
+        {{ pivot_table|safe }}
+    {% else %}
+        <p>No result.</p>
+    {% endif %}
+</div>
+
 {% endblock %}
+
