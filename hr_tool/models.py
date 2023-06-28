@@ -16,7 +16,7 @@ class MSkill(models.Model):
 
 class MCareerLevel(models.Model):
     id = models.SmallAutoField('キャリアレベルid', primary_key=True)
-    name = models.CharField('キャリアレベルの名称')
+    name = models.CharField('キャリアレベルの名称', max_length=64)
     level = models.SmallIntegerField('キャリアレベル')
 
 
@@ -72,19 +72,36 @@ class TAccount(models.Model):
     description = models.TextField('アカウント説明', max_length=1024, null=True)
 
 
-
-
-
-
 class TProject(models.Model):
     id = models.IntegerField('プロジェクトid', primary_key=True)
     name = models.CharField('プロジェクト名', max_length=64, unique=True)
     description = models.TextField('プロジェクト説明', max_length=1024)
+    account = models.ForeignKey(TAccount, verbose_name='アカウント', on_delete=models.CASCADE, to_field='id', related_name='tproject_account')
 
 
 class TAssignExp(models.Model):
     id = models.AutoField('アサイン経験id', primary_key=True)
-    eid = models.ForeignKey(User, verbose_name='社員番号', on_delete=models.CASCADE, to_field='id', related_name='t_pre_career_eid')
+    eid = models.ForeignKey(User, verbose_name='社員番号', on_delete=models.CASCADE, to_field='id', related_name='t_assign_exp_eid')
+    project = models.ForeignKey(TProject, verbose_name='プロジェクト', on_delete=models.CASCADE, to_field='id', related_name='t_assign_exp_project')
     role = models.CharField('ロール', max_length=64)
     start_date = models.DateField('開始日')
     end_date = models.DateField('終了日')
+
+
+class TTraining(models.Model):
+    id = models.IntegerField('トレーニングid', primary_key=True)
+    name = models.CharField('トレーニング名', max_length=64, unique=True)
+    description = models.TextField('トレーニング説明', max_length=1024)
+
+
+class TTrainingExp(models.Model):
+    id = models.AutoField('トレーニング経験id', primary_key=True)
+    training_id = models.ForeignKey(TTraining, verbose_name='トレーニング', on_delete=models.CASCADE, to_field='id', related_name='t_training_exp_training')
+    eid = models.ForeignKey(User, verbose_name='社員番号', on_delete=models.CASCADE, to_field='id', related_name='t_training_exp_eid')
+
+
+class TSkill(models.Model):
+    id = models.AutoField('スキル経験id', primary_key=True)
+    eid = models.ForeignKey(User, verbose_name='社員番号', on_delete=models.CASCADE, to_field='id', related_name='t_skill_exp_eid')
+    skill = models.ForeignKey(MSkill, verbose_name='スキル', on_delete=models.CASCADE, to_field='id', related_name='t_skill_m_skill')
+    updated_date = models.DateField('更新日')
