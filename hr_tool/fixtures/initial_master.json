@@ -1,0 +1,154 @@
+[
+    {
+        "model": "hr_tool.mskillcategory",
+        "pk": 0,
+        "fields": {
+            "name": "Programming"
+        }
+    },
+    {
+        "model": "hr_tool.mskillcategory",
+        "pk": 1,
+        "fields": {
+            "name": "Financial"
+        }
+    },
+    {
+        "model": "hr_tool.mcareerlevel",
+        "pk": 0,
+        "fields": {
+            "name": "Accenture Leadership",
+            "level": 1
+        }
+    },
+    {
+        "model": "hr_tool.mcareerlevel",
+        "pk": 1,
+        "fields": {
+            "name": "Accenture Leadership",
+            "level": 2
+        }
+    },
+    {
+        "model": "hr_tool.mcareerlevel",
+        "pk": 2,
+        "fields": {
+            "name": "Accenture Leadership",
+            "level": 3
+        }
+    },
+    {
+        "model": "hr_tool.mcareerlevel",
+        "pk": 3,
+        "fields": {
+            "name": "Accenture Leadership",
+            "level": 4
+        }
+    },
+    {
+        "model": "hr_tool.mcareerlevel",
+        "pk": 4,
+        "fields": {
+            "name": "Associate Managing Director",
+            "level": 5
+        }
+    },
+    {
+        "model": "hr_tool.mcareerlevel",
+        "pk": 5,
+        "fields": {
+            "name": "Senior Manager",
+            "level": 6
+        }
+    },
+    {
+        "model": "hr_tool.mcareerlevel",
+        "pk": 6,
+        "fields": {
+            "name": "Manager",
+            "level": 7
+        }
+    },
+    {
+        "model": "hr_tool.mcareerlevel",
+        "pk": 7,
+        "fields": {
+            "name": "Associate Manager",
+            "level": 8
+        }
+    },
+    {
+        "model": "hr_tool.mcareerlevel",
+        "pk": 8,
+        "fields": {
+            "name": "Consultant",
+            "level": 9
+        }
+    },
+    {
+        "model": "hr_tool.mcareerlevel",
+        "pk": 9,
+        "fields": {
+            "name": "Senior Analyst",
+            "level": 10
+        }
+    },
+    {
+        "model": "hr_tool.mcareerlevel",
+        "pk": 10,
+        "fields": {
+            "name": "Analyst",
+            "level": 11
+        }
+    },
+    {
+        "model": "hr_tool.mcareerlevel",
+        "pk": 11,
+        "fields": {
+            "name": "Analyst",
+            "level": 11
+        }
+    },
+    {
+        "model": "hr_tool.mindustry",
+        "pk": 0,
+        "fields": {
+            "name": "Product"
+        }
+    },
+    {
+        "model": "hr_tool.mindustry",
+        "pk": 1,
+        "fields": {
+            "name": "HSP"
+        }
+    },
+    {
+        "model": "hr_tool.mdte",
+        "pk": 0,
+        "fields": {
+            "name": "IES"
+        }
+    },
+    {
+        "model": "hr_tool.mdte",
+        "pk": 1,
+        "fields": {
+            "name": "ITS-IES"
+        }
+    },
+    {
+        "model": "hr_tool.mhomeoffice",
+        "pk": 0,
+        "fields": {
+            "name": "Akasaka"
+        }
+    },
+    {
+        "model": "hr_tool.mhomeoffice",
+        "pk": 1,
+        "fields": {
+            "name": "Minatomirai"
+        }
+    }
+]
