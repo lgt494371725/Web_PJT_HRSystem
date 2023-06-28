@@ -52,6 +52,8 @@ class User(AbstractBaseUser):
     homeoffice_id = models.ForeignKey(MHomeoffice, on_delete=models.PROTECT, to_field='id', related_name='user_homeoffice')
     dte = models.ForeignKey(MDte, on_delete=models.PROTECT, to_field='id', related_name='user_dte')
 
+    USERNAME_FIELD = 'id'
+
     # TODO: 認証機能
     # password =
 

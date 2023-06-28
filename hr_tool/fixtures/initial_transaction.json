@@ -1,0 +1,268 @@
+[   {
+        "model": "hr_tool.mskillcategory",
+        "pk": 0,
+        "fields": {
+            "name": "Programming"
+        }
+    },
+    {
+        "model": "hr_tool.mskillcategory",
+        "pk": 1,
+        "fields": {
+            "name": "Financial"
+        }
+    },
+    {
+        "model": "hr_tool.mskill",
+        "pk": 1,
+        "fields": {
+            "name": "Java",
+            "skill_category": 0
+        }
+    },
+    {
+        "model": "hr_tool.mskill",
+        "pk": 2,
+        "fields": {
+            "name": "Python",
+            "skill_category": 0
+        }
+    },
+    {
+        "model": "hr_tool.mskill",
+        "pk": 3,
+        "fields": {
+            "name": "FP",
+            "skill_category": 1
+        }
+    },
+    {
+        "model": "hr_tool.mcareerlevel",
+        "pk": 0,
+        "fields": {
+            "name": "Accenture Leadership",
+            "level": 1
+        }
+    },
+    {
+        "model": "hr_tool.mcareerlevel",
+        "pk": 1,
+        "fields": {
+            "name": "Accenture Leadership",
+            "level": 2
+        }
+    },
+    {
+        "model": "hr_tool.mcareerlevel",
+        "pk": 2,
+        "fields": {
+            "name": "Accenture Leadership",
+            "level": 3
+        }
+    },
+    {
+        "model": "hr_tool.mcareerlevel",
+        "pk": 3,
+        "fields": {
+            "name": "Accenture Leadership",
+            "level": 4
+        }
+    },
+    {
+        "model": "hr_tool.mcareerlevel",
+        "pk": 4,
+        "fields": {
+            "name": "Associate Managing Director",
+            "level": 5
+        }
+    },
+    {
+        "model": "hr_tool.mcareerlevel",
+        "pk": 5,
+        "fields": {
+            "name": "Senior Manager",
+            "level": 6
+        }
+    },
+    {
+        "model": "hr_tool.mcareerlevel",
+        "pk": 6,
+        "fields": {
+            "name": "Manager",
+            "level": 7
+        }
+    },
+    {
+        "model": "hr_tool.mcareerlevel",
+        "pk": 7,
+        "fields": {
+            "name": "Associate Manager",
+            "level": 8
+        }
+    },
+    {
+        "model": "hr_tool.mcareerlevel",
+        "pk": 8,
+        "fields": {
+            "name": "Consultant",
+            "level": 9
+        }
+    },
+    {
+        "model": "hr_tool.mcareerlevel",
+        "pk": 9,
+        "fields": {
+            "name": "Senior Analyst",
+            "level": 10
+        }
+    },
+    {
+        "model": "hr_tool.mcareerlevel",
+        "pk": 10,
+        "fields": {
+            "name": "Analyst",
+            "level": 11
+        }
+    },
+    {
+        "model": "hr_tool.mcareerlevel",
+        "pk": 11,
+        "fields": {
+            "name": "Analyst",
+            "level": 11
+        }
+    },
+    {
+        "model": "hr_tool.mindustry",
+        "pk": 0,
+        "fields": {
+            "name": "Product"
+        }
+    },
+    {
+        "model": "hr_tool.mindustry",
+        "pk": 1,
+        "fields": {
+            "name": "HSP"
+        }
+    },
+    {
+        "model": "hr_tool.mdte",
+        "pk": 0,
+        "fields": {
+            "name": "IES"
+        }
+    },
+    {
+        "model": "hr_tool.mdte",
+        "pk": 1,
+        "fields": {
+            "name": "ITS-IES"
+        }
+    },
+    {
+        "model": "hr_tool.mhomeoffice",
+        "pk": 0,
+        "fields": {
+            "name": "Akasaka"
+        }
+    },
+    {
+        "model": "hr_tool.mhomeoffice",
+        "pk": 1,
+        "fields": {
+            "name": "Minatomirai"
+        }
+    },
+    {
+        "model": "hr_tool.user",
+        "pk": "12345678",
+        "fields": {
+            "password": "test",
+            "last_login": "2023-06-28T04:44:40Z",
+            "last_name": "Akasaka",
+            "first_name": "Taro",
+            "middle_name": null,
+            "birthday": "2023-06-28",
+            "career_level": 11,
+            "is_hr": false,
+            "join_of": "2023-06-28",
+            "homeoffice_id": 0,
+            "dte": 0
+        }
+    },
+    {
+        "model": "hr_tool.tprecareer",
+        "pk": 1,
+        "fields": {
+            "eid": "12345678",
+            "role": "Software Engineer",
+            "start_date": "2022-01-01",
+            "end_date": "2023-01-01",
+            "exp_detail": "Develop some web applications using Java"
+        }
+    },
+    {
+        "model": "hr_tool.taccount",
+        "pk": 0,
+        "fields": {
+            "name": "JapanGov",
+            "industry": 1,
+            "description": "日本政府"
+        }
+    },
+    {
+        "model": "hr_tool.tproject",
+        "pk": 0,
+        "fields": {
+            "name": "マイナンバープロジェクト",
+            "description": "マイナンバーに関するプロジェクトです",
+            "account": 0
+        }
+    },
+    {
+        "model": "hr_tool.tassignexp",
+        "pk": 1,
+        "fields": {
+            "eid": "12345678",
+            "project": 0,
+            "role": "PMO",
+            "start_date": "2023-01-28",
+            "end_date": "2023-06-28"
+        }
+    },
+    {
+        "model": "hr_tool.ttraining",
+        "pk": 0,
+        "fields": {
+            "name": "SpringBoot",
+            "description": "Basic training of SpringBoot"
+        }
+    },
+    {
+        "model": "hr_tool.ttrainingexp",
+        "pk": 1,
+        "fields": {
+            "training_id": 0,
+            "eid": "12345678"
+        }
+    },
+    {
+        "model": "hr_tool.tskill",
+        "pk": 1,
+        "fields": {
+            "eid": "12345678",
+            "skill": 1,
+            "updated_date": "2023-06-28"
+        }
+    },
+    {
+        "model": "hr_tool.tskill",
+        "pk": 2,
+        "fields": {
+            "eid": "12345678",
+            "skill": 3,
+            "updated_date": "2023-06-28"
+        }
+    }
+]
