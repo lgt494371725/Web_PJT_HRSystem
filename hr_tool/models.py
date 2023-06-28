@@ -19,6 +19,7 @@ class MSkill(models.Model):
     def __str__(self):
         return self.name
 
+
 class MCareerLevel(models.Model):
     id = models.SmallAutoField('キャリアレベルid', primary_key=True)
     name = models.CharField('キャリアレベルの名称', max_length=64)
@@ -27,6 +28,7 @@ class MCareerLevel(models.Model):
     def __str__(self):
         return f'{self.name} (ML: {self.level})'
 
+
 class MIndustry(models.Model):
     id = models.SmallIntegerField('インダストリid', primary_key=True)
     name = models.CharField('インダストリ名', max_length=64, unique=True)
@@ -34,12 +36,14 @@ class MIndustry(models.Model):
     def __str__(self):
         return self.name
 
+
 class MDte(models.Model):
     id = models.SmallIntegerField('部門id', primary_key=True)
     name = models.CharField('部門名', max_length=64, unique=True)
 
     def __str__(self):
         return self.name
+
 
 class MHomeoffice(models.Model):
     id = models.SmallIntegerField('ホームオフィスid', primary_key=True)
@@ -130,11 +134,11 @@ class TTraining(models.Model):
 
 class TTrainingExp(models.Model):
     id = models.AutoField('トレーニング経験id', primary_key=True)
-    training_id = models.ForeignKey(TTraining, verbose_name='トレーニング', on_delete=models.CASCADE, to_field='id', related_name='t_training_exp_training')
+    training = models.ForeignKey(TTraining, verbose_name='トレーニング', on_delete=models.CASCADE, to_field='id', related_name='t_training_exp_training')
     eid = models.ForeignKey(User, verbose_name='社員番号', on_delete=models.CASCADE, to_field='id', related_name='t_training_exp_eid')
 
     def __str__(self):
-        return f'{self.eid.last_name} の {self.training_id.name}'
+        return f'{self.eid.last_name} の {self.training.name}'
 
 
 class TSkill(models.Model):
