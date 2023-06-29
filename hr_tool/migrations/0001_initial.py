@@ -86,7 +86,7 @@ class Migration(migrations.Migration):
                 ('join_of', models.DateField(verbose_name='入社日')),
                 ('career_level', models.ForeignKey(on_delete=django.db.models.deletion.PROTECT, related_name='user_cl', to='hr_tool.mcareerlevel', verbose_name='キャリアレベル')),
                 ('dte', models.ForeignKey(on_delete=django.db.models.deletion.PROTECT, related_name='user_dte', to='hr_tool.mdte')),
-                ('homeoffice_id', models.ForeignKey(on_delete=django.db.models.deletion.PROTECT, related_name='user_homeoffice', to='hr_tool.mhomeoffice')),
+                ('homeoffice', models.ForeignKey(on_delete=django.db.models.deletion.PROTECT, related_name='user_homeoffice', to='hr_tool.mhomeoffice')),
             ],
             options={
                 'db_table': 't_employee',
@@ -97,7 +97,7 @@ class Migration(migrations.Migration):
             fields=[
                 ('id', models.AutoField(primary_key=True, serialize=False, verbose_name='トレーニング経験id')),
                 ('eid', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='t_training_exp_eid', to='hr_tool.user', verbose_name='社員番号')),
-                ('training_id', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='t_training_exp_training', to='hr_tool.ttraining', verbose_name='トレーニング')),
+                ('training', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='t_training_exp_training', to='hr_tool.ttraining', verbose_name='トレーニング')),
             ],
         ),
         migrations.CreateModel(
