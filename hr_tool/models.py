@@ -1,5 +1,5 @@
 from django.db import models
-from django.contrib.auth.models import AbstractBaseUser
+from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
 
 
 # マスタテーブル
@@ -52,6 +52,41 @@ class MHomeoffice(models.Model):
     def __str__(self):
         return self.name
 
+class UserManager(BaseUserManager):
+
+    def create_user(self, id, password = None):
+        if not id:
+            raise ValueError('Users must have an id')
+        
+        user = self.model(
+            id = id
+        )
+
+        user.set_password(password)
+
+        user.save(using = self.db)
+        return user
+
+    def create_hruser(self, id, password):
+        user = self.create_user(
+            id = id
+        )
+        user.set_password(password)
+        user.is_hr = True
+        user.save(using=self._db)
+        return user
+
+    def create_superuser(self, id,last_name, password):
+        user = self.create_user(
+            id = id,
+            last_name = last_name,
+        )
+        user.set_password(password)
+        user.is_hr = True
+        user.save(using=self._db)
+        return user
+
+AUTH_USER_MODEL = 'hr_tool.User'
 
 # トランザクションテーブル
 class User(AbstractBaseUser):
@@ -74,6 +109,8 @@ class User(AbstractBaseUser):
 
     def __str__(self):
         return f'{self.last_name} {self.first_name} ({self.id})'
+
+    objects = UserManager()
 
     # TODO: 認証機能
     # password =

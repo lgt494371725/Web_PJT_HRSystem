@@ -69,7 +69,7 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'system_development.wsgi.application'
-
+AUTH_USER_MODEL = 'hr_tool.User'
 
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases

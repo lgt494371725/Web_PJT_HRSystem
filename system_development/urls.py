@@ -15,9 +15,10 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
-
+from hr_tool import views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('hr_tool/', include('hr_tool.urls'))
+    path('hr_tool/', include('hr_tool.urls')),
+    path('signup/', views.signupuser)
 ]
