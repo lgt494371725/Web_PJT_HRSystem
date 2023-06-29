@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div>
+<select id='careerLevels_dropdown' style="width: 300px;"></select>
+<select id='industries_dropdown' style="width: 300px;"></select>
+<select id='homeoffices_dropdown' style="width: 300px;"></select>
+<select id='dtes_dropdown' style="width: 300px;"></select>
+<select id='skill_categrories_dropdown' style="width: 300px;"></select>
+<select id='skill_dropdown' style="width: 300px;"></select>
+
+</div>
+{% endblock %}
+
+
+{%block js_code%}
+<script>
+    setCareerLevelsDropdown('#careerLevels_dropdown');
+    setIndustriesDropdown('#industries_dropdown');
+    setHomeofficesDropdown('#homeoffices_dropdown');
+    setDtesDropdown('#dtes_dropdown')
+    setSkillCategoriesDropdown('#skill_categrories_dropdown');
+    setSkillDropdown('#skill_dropdown');
+    setSkillInCategoriesDropdown('#skill_dropdown',null);
+</script>
+{% endblock %}
+
+
