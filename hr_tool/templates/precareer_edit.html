@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h2>Precareer Edit 画面</h2>
+<a href="{% url 'hr_tool:add_pre_career' pk %}">追加</a>
+
+<p>
+    {% for precareer in precareers %}
+        <p>{{ precareer }}</p>
+    {% endfor %}
+</p>
+
+{% endblock %}
+

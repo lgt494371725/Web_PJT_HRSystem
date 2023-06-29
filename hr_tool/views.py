@@ -4,7 +4,6 @@ from .forms import PreCareerCreateForm
 
 from .models import User, TPreCareer
 
-# Create your views here.
 def employee_list(request):
     return render(request, 'list.html')
 
@@ -19,6 +18,16 @@ def detail(request, pk):
     }
 
     return render(request, 'detail.html', context)
+
+
+def edit_precareer(request, pk):
+    precareers = TPreCareer.objects.filter(eid=pk)
+
+    context = {
+        'pk': pk,
+        'precareers': precareers
+    }
+    return render(request, 'precareer_edit.html', context)
 
 
 def add_precareer(request, pk):
