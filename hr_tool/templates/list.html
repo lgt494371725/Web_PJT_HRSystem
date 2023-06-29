@@ -5,10 +5,9 @@
 <div class="row justify-content-between">
   <div class="col">
       <form action="" method="GET">
-          &nbsp;&nbsp;{{ form }}
-          <span class="search-prefix">EnterpriseID:</span>
-          <input type="search" class="form-control rounded" />
-          <button type="submit" class="btn btn-primary">Search</button>
+         &nbsp;&nbsp;{{ form }}
+        <!-- <input type="search"  /> -->
+        <button type="submit" class="btn btn-primary">Search</button>
       </form>
   </div>
 </div>
@@ -18,7 +17,7 @@
     <tr>
       <th>EID</th>
       <th>DTE</th>
-      <th>Career Level</th>
+      <th>Management Level</th>
       <th>Joining Date</th>
       <th>Home Office</th>
     </tr>
@@ -26,10 +25,9 @@
   {% for employee in employees %}
   <tr>
     <td>
-        <a class="nav-link" href="{% url 'hr_tool:detail' pk=2 %}">
-          {{ employee.id }}</a>
-        </td>
-    
+        <a href="{% url 'hr_tool:detail' pk=2 %}">
+            {{ employee.id }}</a>
+        </td>   
     <td>{{  employee.dte }}</td>
     <td>{{  employee.career_level }}</td>
     <td>{{  employee.join_of }}</td>
