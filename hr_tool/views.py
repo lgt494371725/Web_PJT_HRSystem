@@ -52,7 +52,7 @@ def signupuser(request):
         return render(request, 'hr_user/signupuser.html', {'form': SignUpForm()})
     else:
         if request.POST['password1'] == request.POST['password2']:
-            try:
+            # try:
                 homeoffice = MHomeoffice.objects.get(id=request.POST['homeoffice'])
                 dte = MDte.objects.get(id=request.POST['dte'])
 
@@ -69,10 +69,10 @@ def signupuser(request):
                 user.save()
                 login(request, user)
                 return redirect('hr_tool:detail', pk=request.POST['id'])
-            except IntegrityError:
-                return render(request, 'hr_user/signupuser.html',
-                            {'form': SignUpForm(), 'error': 'Password didnt match.'}
-                            )
+            # except IntegrityError:
+            #     return render(request, 'hr_user/signupuser.html',
+            #                 {'form': SignUpForm(), 'error': 'Password didnt match.'}
+            #                 )
 
 def signup(request):
     return render(request, 'hr_tool/signupuser.html')

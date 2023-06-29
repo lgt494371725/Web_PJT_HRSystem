@@ -115,8 +115,8 @@ class User(AbstractBaseUser, PermissionsMixin):
     dte = models.ForeignKey(MDte, on_delete=models.PROTECT, to_field='id', related_name='user_dte')
 
     # TODO: 後で直す！！
-    is_staff = True
-    is_superuser = True
+    is_staff = models.BooleanField('is_staff', default=True)
+    is_superuser = models.BooleanField('is_superuser', default=True)
 
     USERNAME_FIELD = 'id'
 

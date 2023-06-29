@@ -13,6 +13,7 @@
     <div class="container">
       <nav class="nav">
         <a class="nav-link" href="{% url 'hr_tool:list' %}">一覧</a>
+        <span>{{user}}としてログイン中</span>
       </nav>
       {% block content %}
       {% endblock %}
