@@ -1,5 +1,5 @@
 from django import forms
-from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from .models import User, MDte, MHomeoffice
 
 
@@ -23,3 +23,8 @@ class SignUpForm(UserCreationForm):
         super(SignUpForm, self).__init__(*args, **kwargs)
         self.fields['dte'].queryset = MDte.objects.all()
         self.fields['homeoffice'].queryset = MHomeoffice.objects.all()
+
+
+class LoginFrom(AuthenticationForm):
+    class Meta:
+        model = User

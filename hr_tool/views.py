@@ -5,7 +5,8 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import login
 from django.db import IntegrityError
-from .forms import SignUpForm
+from .forms import SignUpForm, LoginFrom
+from django.contrib.auth.views import LoginView as BaseLoginView
 
 # Create your views here.
 def employee_list(request):
@@ -75,3 +76,8 @@ def signupuser(request):
 
 def signup(request):
     return render(request, 'hr_tool/signupuser.html')
+
+
+class LoginView(BaseLoginView):
+    form_class = LoginFrom
+    template_name = 'hr_user/login.html'
