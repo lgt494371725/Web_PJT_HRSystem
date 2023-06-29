@@ -88,7 +88,7 @@ class TPreCareer(models.Model):
     exp_detail = models.TextField('経験詳細', max_length=512)
 
     def __str__(self):
-        return self.id
+        return self.exp_detail
 
 
 class TAccount(models.Model):

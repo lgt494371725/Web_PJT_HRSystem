@@ -2,4 +2,92 @@
 
 {% block content %}
 ここに詳細画面を表示する。
+
+<div>
+    <h3>個人情報</h3>
+    <table class="table table-striped">
+        <tbody>
+            {% for label, value in employee_data %}
+                <tr>
+                    <th scope="row">{{ label }}</th>
+                    <td>{{ value }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+<div>
+    <h3>入社前経験</h3>
+    {% for pre_career in pre_careers %}
+        <table class="table table-striped">
+            <tbody>
+                <tr>
+                    <th scope="row">ロール</th>
+                    <td>{{ pre_career.role }}</td>
+                </tr>
+                <tr>
+                    <th scope="row">開始日</th>
+                    <td>{{ pre_career.start_date }}</td>
+                </tr>
+                <tr>
+                    <th scope="row">終了日</th>
+                    <td>{{ pre_career.end_date}}</td>
+                </tr>
+                <tr>
+                    <th scope="row">詳細</th>
+                    <td>{{ pre_career.exp_detail }}</td>
+                </tr>
+            </tbody>
+        </table>
+    {% endfor %}
+</div>
+
+<div>
+    <h3>スキル情報</h3>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+              <th scope="col">スキル名</th>
+              <th scope="col">更新日</th>
+            </tr>
+          </thead>
+        <tbody>
+            {% for skill in skills %}
+                <tr>
+                    <th scope="row">{{ skill.skill.name }}</th>
+                    <td>{{ skill.updated_date }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+<div>
+    <h3>アサイン経験情報</h3>
+    {% for assign in assigns %}
+        <table class="table table-striped">
+            <tbody>
+                <tr>
+                    <th scope="row">プロジェクト名</th>
+                    <td>{{ assign.project.name }}</td>
+                </tr>
+                <tr>
+                    <th scope="row">ロール</th>
+                    <td>{{ assign.role }}</td>
+                </tr>
+                <tr>
+                    <th scope="row">開始日</th>
+                    <td>{{ assign.start_date}}</td>
+                </tr>
+                <tr>
+                    <th scope="row">終了日</th>
+                    <td>{{ assign.end_date }}</td>
+                </tr>
+            </tbody>
+        </table>
+    {% endfor %}
+</div>
+
+
 {% endblock %}
