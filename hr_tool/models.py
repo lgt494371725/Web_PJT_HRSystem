@@ -2,7 +2,7 @@ from django.db import models
 from django.contrib.auth.models import AbstractBaseUser
 
 
-# マスタテーブル
+# マスタテーブルjoin_month
 class MSkillCategory(models.Model):
     id = models.AutoField('スキルカテゴリid', primary_key=True)
     name = models.CharField('スキルカテゴリ名前', max_length=64, unique=True)

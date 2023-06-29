@@ -30,5 +30,15 @@ class PivotTableForm(forms.Form):
     ]
     row = forms.ChoiceField(choices=CHOICES)
     column = forms.ChoiceField(choices=CHOICES,required=False)
-    value = forms.ChoiceField(choices=CHOICES)
+    value = forms.ChoiceField(choices=CHOICES, required=False)
     agg_func = forms.ChoiceField(choices=AGG_CHOICES)
+
+    def clean(self):
+        cleaned_data = super().clean()
+        agg_func = cleaned_data.get('agg_func')
+        value = cleaned_data.get('value')
+
+        if agg_func == 'count' and value:
+            self.add_error('value', 'Value cannot be selected when Aggregation Function is "count".')
+
+        return cleaned_data

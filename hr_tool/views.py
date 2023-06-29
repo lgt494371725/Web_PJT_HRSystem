@@ -3,6 +3,10 @@ from django.http import HttpResponse
 from .models import *
 import pandas as pd
 from .forms import PivotTableForm
+from .para import mapping_dict
+from django.conf import settings
+import os
+from urllib.parse import unquote
 
 
 def employee_list(request):
@@ -14,25 +18,67 @@ def detail(request, pk):
 
 # pivot table analysis page
 def analysis(request):
-    pivot_table = None
-    if request.method == 'POST':
-        form = PivotTableForm(request.POST)
-        if form.is_valid():
-            row = form.cleaned_data['row']
-            column = form.cleaned_data['column']
-            value = form.cleaned_data['value']
-            agg_func = form.cleaned_data['agg_func']
-            # get records from db based on query
-            queryset = None
-            df = pd.DataFrame.from_records(queryset)
-            # create pivot table
-            pivot_table = pd.pivot_table(df, values=value, index=row, columns=column, aggfunc=agg_func)
-            # transform to the html
-            pivot_table = pivot_table.to_html()
+    """
+    situation:
+    1. cate counts: row != None, col = val = None
+    2. cate counts: but wrong choose 
+    3. cate counts: row = col != None, val = None
+    4. normal: row=col=val!=None, but val wrong choice
+    """
+    try:
+        pivot_table = None
+        if request.method == 'POST':
+            form = PivotTableForm(request.POST)
+            if form.is_valid():
+                row = form.cleaned_data['row']
+                col = form.cleaned_data['column']
+                col = col if col else None  # col will be '' if no choose
+                val = form.cleaned_data['value']
+                agg_func = form.cleaned_data['agg_func']
+                # get records from db based on query
+                row_data = mapping_dict[row][1]
+                col_data = mapping_dict[col][1] if col else None
+                val_data = mapping_dict[val][1] if val else None
+                if agg_func == "count":
+                    val = "number"
+                    val_data = [1]*len(row_data)
+                print("row_data", row_data)
+                print("col_data", col_data)
+                print("val_data", val_data)
+                df = pd.DataFrame({row: row_data,
+                                col: col_data,
+                                val: val_data})
+                print(df)
+                # # create pivot table
+                pivot_table = pd.pivot_table(df, values=val, index=row, columns=col, aggfunc=agg_func, fill_value=0)
+                # # transform to the html
+                print("table:\n", pivot_table)
+                pivot_table = pivot_table.to_html()
+        else:
+            form = PivotTableForm()
+        context = {
+            'form': form,
+            'pivot_table': pivot_table
+        }
+        return render(request, 'pivot_table.html', context)
+    except Exception as e:
+        print(f"Wrong choices!! {type(e)}, error message:", e)
+        return render(request, 'pivot_table.html', {'pivot_table': e})
+    
+
+def download_file_view(request):
+    pivot_table_data = unquote(request.GET.get('pivot_table', ''))
+
+    if pivot_table_data:
+        pivot_table_data = pd.read_html(pivot_table_data)[0]
+        pivot_table_data = pivot_table_data.to_csv(index=False)
+        response = HttpResponse(content_type='text/csv')
+        response['Content-Disposition'] = 'attachment; filename="pivot_table.csv"'
+
+        # 将pivot table数据写入响应
+        response.write(pivot_table_data)
+
+        return response
     else:
-        form = PivotTableForm()
-    context = {
-        'form': form,
-        'pivot_table': pivot_table
-    }
-    return render(request, 'pivot_table.html', context)
+        # 如果没有pivot table数据，则返回错误响应或重定向到其他页面
+        return HttpResponse("Error: Pivot table data is missing.", content_type='text/plain')
