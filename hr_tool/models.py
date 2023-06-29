@@ -1,5 +1,5 @@
 from django.db import models
-from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
+from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin
 
 
 # マスタテーブル
@@ -54,17 +54,26 @@ class MHomeoffice(models.Model):
 
 class UserManager(BaseUserManager):
 
-    def create_user(self, id, password = None):
+    def create_user(self, id, password = None, **extra_fields):
         if not id:
             raise ValueError('Users must have an id')
-        
+
+        import datetime
+        extra_fields.setdefault('birthday', datetime.date(1970, 1, 1))
+        extra_fields['join_of'] = datetime.date.today()
+        extra_fields['is_hr'] = False
+        extra_fields['career_level'] = MCareerLevel.objects.filter(level=11)[0]
+
+        print(extra_fields)
+
         user = self.model(
-            id = id
+            id = id,
+            **extra_fields
         )
 
         user.set_password(password)
-
         user.save(using = self.db)
+
         return user
 
     def create_hruser(self, id, password):
@@ -89,7 +98,7 @@ class UserManager(BaseUserManager):
 AUTH_USER_MODEL = 'hr_tool.User'
 
 # トランザクションテーブル
-class User(AbstractBaseUser):
+class User(AbstractBaseUser, PermissionsMixin):
     class Meta:
         db_table = 't_employee'
 
@@ -105,6 +114,10 @@ class User(AbstractBaseUser):
     homeoffice = models.ForeignKey(MHomeoffice, on_delete=models.PROTECT, to_field='id', related_name='user_homeoffice')
     dte = models.ForeignKey(MDte, on_delete=models.PROTECT, to_field='id', related_name='user_dte')
 
+    # TODO: 後で直す！！
+    is_staff = True
+    is_superuser = True
+
     USERNAME_FIELD = 'id'
 
     def __str__(self):
@@ -112,8 +125,6 @@ class User(AbstractBaseUser):
 
     objects = UserManager()
 
-    # TODO: 認証機能
-    # password =
 
 
 class TPreCareer(models.Model):

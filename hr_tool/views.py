@@ -1,11 +1,11 @@
 from django.shortcuts import render
 from django.shortcuts import get_object_or_404, redirect, render
-from .models import User, TPreCareer, TSkill, TAssignExp
+from .models import User, TPreCareer, TSkill, TAssignExp, MDte, MHomeoffice
 from django.shortcuts import render, redirect
 from django.contrib.auth.forms import UserCreationForm
-from django.contrib.auth.models import User
 from django.contrib.auth import login
 from django.db import IntegrityError
+from .forms import SignUpForm
 
 # Create your views here.
 def employee_list(request):
@@ -48,19 +48,29 @@ def detail(request, pk):
 
 def signupuser(request):
     if request.method == 'GET':
-        return render(request, 'hr_user/signupuser.html', {'form': UserCreationForm()})
+        return render(request, 'hr_user/signupuser.html', {'form': SignUpForm()})
     else:
         if request.POST['password1'] == request.POST['password2']:
             try:
+                homeoffice = MHomeoffice.objects.get(id=request.POST['homeoffice'])
+                dte = MDte.objects.get(id=request.POST['dte'])
+
                 user = User.objects.create_user(
                     request.POST['id'],
-                    password=request.POST['password1'])
+                    first_name=request.POST['first_name'],
+                    last_name=request.POST['last_name'],
+                    middle_name=request.POST['middle_name'],
+                    password=request.POST['password1'],
+                    birthday=request.POST['birthday'],
+                    dte=dte,
+                    homeoffice=homeoffice
+                )
                 user.save()
                 login(request, user)
-                return redirect('detial')
+                return redirect('hr_tool:detail', pk=request.POST['id'])
             except IntegrityError:
                 return render(request, 'hr_user/signupuser.html',
-                            {'form': UserCreationForm(), 'error': 'Password didnt match.'}
+                            {'form': SignUpForm(), 'error': 'Password didnt match.'}
                             )
 
 def signup(request):
