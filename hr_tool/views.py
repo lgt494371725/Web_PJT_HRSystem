@@ -6,6 +6,7 @@ from .forms import PivotTableForm, SearchForm
 from .para import mapping_dict
 from urllib.parse import unquote
 from django.db import models
+from django.core.paginator import Paginator
 
 
 def employee_list(request):
@@ -18,9 +19,16 @@ def employee_list(request):
         employees = User.objects.all() 
         employees = employees.filter(models.Q(id__icontains=query))
     else:
-        print("!!!error:",form.errors)
         employees = User.objects.all() 
+    paginator = Paginator(employees, 3) 
+    page_number = request.GET.get('page', 1)
+    try:
+        page_number = max(1, int(page_number))
+    except ValueError:
+        page_number = 1
+    page_obj = paginator.get_page(page_number)
     context = {
+        'page_obj': page_obj,
         'employees':employees,
         'form': form
     }

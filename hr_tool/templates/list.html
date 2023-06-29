@@ -22,7 +22,7 @@
       <th>Home Office</th>
     </tr>
   </thead>
-  {% for employee in employees %}
+  {% for employee in page_obj %}
   <tr>
     <td>
         <a href="{% url 'hr_tool:detail' pk=2 %}">
@@ -36,5 +36,5 @@
 {% endfor %}
 </table>
 </div>
-<a class="nav-link" href="{% url 'hr_tool:detail' pk=2 %}">詳細例</a>
+{% include 'page.html' %}
 {% endblock %}
