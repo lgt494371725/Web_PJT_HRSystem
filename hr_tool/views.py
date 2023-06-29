@@ -2,19 +2,34 @@ from django.shortcuts import render
 from django.http import HttpResponse
 from .models import *
 import pandas as pd
-from .forms import PivotTableForm
+from .forms import PivotTableForm, SearchForm
 from .para import mapping_dict
-from django.conf import settings
-import os
 from urllib.parse import unquote
+from django.db import models
 
 
 def employee_list(request):
-    return render(request, 'list.html')
+    form = SearchForm(request.GET)
+    employees = User.objects.all() 
+    print(form)
+    if form.is_valid():
+        query = form.cleaned_data['Search']
+        print('abc',query)
+        employees = User.objects.all() 
+        employees = employees.filter(models.Q(id__icontains=query))
+    else:
+        print("!!!error:",form.errors)
+        employees = User.objects.all() 
+    context = {
+        'employees':employees,
+        'form': form
+    }
+    return render(request, 'list.html',context)
 
 
 def detail(request, pk):
     return render(request, 'detail.html')
+
 
 # pivot table analysis page
 def analysis(request):

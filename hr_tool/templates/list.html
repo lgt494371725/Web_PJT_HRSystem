@@ -1,8 +1,40 @@
 {% extends "base.html" %}
 
 {% block content %}
-ここに社員リストを表示する。
-
+<h1>Employee Management System</h1>
+<div class="row justify-content-between">
+  <div class="col">
+      <form action="" method="GET">
+         &nbsp;&nbsp;{{ form }}
+        <!-- <input type="search"  /> -->
+        <button type="submit" class="btn btn-primary">Search</button>
+      </form>
+  </div>
+</div>
+<div class="col-md-8">
+<table class="table">
+  <thead>
+    <tr>
+      <th>EID</th>
+      <th>DTE</th>
+      <th>Management Level</th>
+      <th>Joining Date</th>
+      <th>Home Office</th>
+    </tr>
+  </thead>
+  {% for employee in employees %}
+  <tr>
+    <td>
+        <a href="{% url 'hr_tool:detail' pk=2 %}">
+            {{ employee.id }}</a>
+        </td>   
+    <td>{{  employee.dte }}</td>
+    <td>{{  employee.career_level }}</td>
+    <td>{{  employee.join_of }}</td>
+    <td>{{  employee.homeoffice_id }}</td> 
+  </tr>
+{% endfor %}
+</table>
+</div>
 <a class="nav-link" href="{% url 'hr_tool:detail' pk=2 %}">詳細例</a>
-
 {% endblock %}
