@@ -1,16 +1,16 @@
-from django.shortcuts import render, get_object_or_404, redirect
-from .models import User, TPreCareer, TSkill, TAssignExp
-from django.http import HttpResponse
-from .models import *
-import pandas as pd
-from .forms import PivotTableForm, SearchForm
-from .para import mapping_dict
 from urllib.parse import unquote
-from django.db import models
+
+import pandas as pd
 from django.core.paginator import Paginator
-from django.shortcuts import render
+from django.db import models
+from django.http import HttpResponse
 from django.shortcuts import get_object_or_404, redirect, render
-from .forms import PreCareerCreateForm
+
+from .forms import (AssignExpCreateForm, PivotTableForm, PreCareerCreateForm,
+                    SearchForm)
+from .models import *
+from .para import mapping_dict
+
 
 def employee_list(request):
     form = SearchForm(request.GET)
@@ -162,7 +162,7 @@ def add_precareer(request, pk):
         precareer = form.save(commit=False)
         precareer.eid = employee
         precareer.save()
-        return redirect('hr_tool:detail', pk=pk)
+        return redirect('hr_tool:edit_precareer', pk=pk)
 
     context = {
         'form': form,
@@ -198,3 +198,61 @@ def delete_precareer(request, pk):
         'precareer': precareer,
     }
     return render(request, 'precareer_confirm_delete.html', context)
+
+
+def edit_assignexp(request, pk):
+    assignexps = TAssignExp.objects.filter(eid=pk)
+
+    context = {
+        'pk': pk,
+        'assignexps': assignexps
+    }
+    return render(request, 'assignexp_edit.html', context)
+
+
+def add_assignexp(request, pk):
+    form = AssignExpCreateForm(request.POST or None)
+    print(form.data)
+    print(dir(form))
+
+    if request.method == 'POST' and form.is_valid():
+        employee = get_object_or_404(User, id=pk)
+        assignexp = form.save(commit=False)
+        assignexp.eid = employee
+        assignexp.save()
+        return redirect('hr_tool:edit_assignexp', pk=pk)
+
+    context = {
+        'form': form,
+        'eid': pk
+    }
+
+    return render(request, 'assignexp_form.html', context)
+
+
+def update_assignexp(request, pk):
+    assignexp = get_object_or_404(TAssignExp, pk=pk)
+    form = AssignExpCreateForm(request.POST or None, instance=assignexp)
+
+    if request.method == 'POST' and form.is_valid():
+        form.save()
+        return redirect('hr_tool:edit_assignexp', pk=assignexp.eid.id)
+
+    context = {
+        'form': form,
+        'eid': assignexp.eid.id
+    }
+    return render(request, 'assignexp_form.html', context)
+
+
+def delete_assignexp(request, pk):
+    assignexp = get_object_or_404(TAssignExp, pk=pk)
+
+    if request.method == 'POST':
+        assignexp.delete()
+        return redirect('hr_tool:edit_assignexp', pk=assignexp.eid.id)
+
+    context = {
+        'assignexp': assignexp
+    }
+    return render(request, 'assignexp_confirm_delete.html', context)
