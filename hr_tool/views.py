@@ -1,5 +1,6 @@
 from django.contrib.auth import login
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.models import User
 from django.contrib.auth.views import LoginView as BaseLoginView
 from django.contrib.auth.views import LogoutView as BaseLogoutView
 from django.shortcuts import get_object_or_404, redirect, render
@@ -87,3 +88,4 @@ class LoginView(BaseLoginView):
 
 class LogoutView(BaseLogoutView):
     success_url = reverse_lazy('/login')
+
