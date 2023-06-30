@@ -13,5 +13,5 @@ class SkillCreateForm(forms.ModelForm):
 
     class Meta:
         model = TSkill
-        fields = ('id', 'eid', 'skill', 'updated_date')
+        fields = ('skill', 'updated_date')
 
