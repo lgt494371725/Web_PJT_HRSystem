@@ -14,7 +14,7 @@ from django.urls import reverse_lazy
 
 from .forms import (AssignExpCreateForm, LoginFrom, PivotTableForm,
                     PreCareerCreateForm, SearchForm, SignUpForm,
-                    SkillCreateForm)
+                    SkillCreateForm, DetailUpdateForm)
 from .models import *
 from .para import cross_query, generate_mapping_dict
 
@@ -22,28 +22,28 @@ from .para import cross_query, generate_mapping_dict
 # Create your views here.
 @login_required
 def employee_list(request):
-    form = SearchForm(request.GET)
-    employees = User.objects.all()
-    print(form)
-    if form.is_valid():
-        query = form.cleaned_data['Search']
-        employees = User.objects.all()
-        employees = employees.filter(models.Q(id__icontains=query))
-    else:
-        employees = User.objects.all()
-    paginator = Paginator(employees, 3)
-    page_number = request.GET.get('page', 1)
-    try:
-        page_number = max(1, int(page_number))
-    except ValueError:
-        page_number = 1
-    page_obj = paginator.get_page(page_number)
-    context = {
-        'page_obj': page_obj,
-        'employees':employees,
-        'form': form
-    }
-    return render(request, 'list.html',context)
+    # form = SearchForm(request.GET)
+    # employees = User.objects.all()
+    # print(form)
+    # if form.is_valid():
+    #     query = form.cleaned_data['Search']
+    #     employees = User.objects.all()
+    #     employees = employees.filter(models.Q(id__icontains=query))
+    # else:
+    #     employees = User.objects.all()
+    # paginator = Paginator(employees, 3)
+    # page_number = request.GET.get('page', 1)
+    # try:
+    #     page_number = max(1, int(page_number))
+    # except ValueError:
+    #     page_number = 1
+    # page_obj = paginator.get_page(page_number)
+    # context = {
+    #     'page_obj': page_obj,
+    #     'employees':employees,
+    #     'form': form
+    # }
+    return render(request, 'list.html')
 
 @login_required
 def detail(request, pk):
@@ -411,3 +411,27 @@ def update_skill(request, pk):
     }
 
     return render(request, 'skill_form.html', context)
+
+
+def update_detail(request, pk):
+    form = DetailUpdateForm(request.POST or None)
+    if request.method == 'POST' and form.is_valid():
+        employee = get_object_or_404(User, id=pk)
+        print('==========')
+        print(form['homeoffice'])
+        cl = MCareerLevel.objects.get(id=request.POST['career_level'])
+        homeoffice = MHomeoffice.objects.get(id=request.POST['homeoffice'])
+        dte = MDte.objects.get(id=request.POST['dte'])
+
+        employee.career_level = cl
+        employee.homeoffice = homeoffice
+        employee.dte = dte
+
+        employee.save()
+        return redirect('hr_tool:detail', pk=pk)
+
+    context = {
+        'form': form
+    }
+
+    return render(request, 'detail_form.html', context)

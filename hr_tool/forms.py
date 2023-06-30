@@ -103,3 +103,15 @@ class SkillCreateForm(forms.ModelForm):
         model = TSkill
         fields = ('skill', 'updated_date')
 
+
+class DetailUpdateForm(forms.ModelForm):
+    class Meta:
+        model = User
+        fields = ('career_level', 'homeoffice', 'dte')
+
+
+    def __init__(self, *args, **kwargs):
+        super(DetailUpdateForm, self).__init__(*args, **kwargs)
+        self.fields['dte'].queryset = MDte.objects.all()
+        self.fields['homeoffice'].queryset = MHomeoffice.objects.all()
+        self.fields['career_level'].queryset = MCareerLevel.objects.all()
