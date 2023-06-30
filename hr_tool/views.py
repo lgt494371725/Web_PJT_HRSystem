@@ -20,7 +20,7 @@ def employee_list(request):
         employees = employees.filter(models.Q(id__icontains=query))
     else:
         employees = User.objects.all() 
-    paginator = Paginator(employees, 3) 
+    paginator = Paginator(employees, 2) 
     page_number = request.GET.get('page', 1)
     try:
         page_number = max(1, int(page_number))
