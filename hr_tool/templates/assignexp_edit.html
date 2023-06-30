@@ -1,12 +1,13 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<a href="{% url 'hr_tool:add_assignexp' pk %}">Add</a>
+<a class="button btn btn-success" 
+href="{% url 'hr_tool:add_assignexp' pk %}">Add</a>
 
 <table class="table">
     <thead>
         <tr>
-            <th>Experience</th>
+            <th>Project</th>
             <th>Role</th>
             <th>開始日</th>
             <th>終了日</th>
@@ -17,7 +18,7 @@
     <tbody>
         {% for assignexp in assignexps %}
         <tr>
-            <td>{{ assignexp.project | slice:"0:10" }}...</td>
+            <td>{{ assignexp.project }}</td>
             <td>{{ assignexp.role }}</td>
             <td>{{ assignexp.start_date }}</td>
             <td>{{ assignexp.end_date }}</td>

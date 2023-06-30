@@ -41,7 +41,7 @@ def add_precareer(request, pk):
         precareer = form.save(commit=False)
         precareer.eid = employee
         precareer.save()
-        return redirect('hr_tool:detail', pk=pk)
+        return redirect('hr_tool:edit_precareer', pk=pk)
 
     context = {
         'form': form,
@@ -99,7 +99,7 @@ def add_assignexp(request, pk):
         assignexp = form.save(commit=False)
         assignexp.eid = employee
         assignexp.save()
-        return redirect('hr_tool:detail', pk=pk)
+        return redirect('hr_tool:edit_assignexp', pk=pk)
 
     context = {
         'form': form,
