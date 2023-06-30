@@ -2,13 +2,32 @@
 
 {% block content %}
 <h2>Precareer Edit 画面</h2>
-<a href="{% url 'hr_tool:add_pre_career' pk %}">追加</a>
+<a href="{% url 'hr_tool:add_precareer' pk %}">追加</a>
 
-<p>
-    {% for precareer in precareers %}
-        <p>{{ precareer }}</p>
-    {% endfor %}
-</p>
+<table class="table">
+    <thead>
+        <tr>
+        <th>ロール</th>
+        <th>開始日</th>
+        <th>終了日</th>
+        <th>詳細</th>
+        <th>#</th>
+        <th>#</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for precareer in precareers %}
+        <tr>
+            <td>{{ precareer.role }}</td>
+            <td>{{ precareer.start_date }}</td>
+            <td>{{ precareer.end_date }}</td>
+            <td>{{ precareer.exp_detail }}</td>
+            <td><a href="{% url 'hr_tool:update_precareer' precareer.id %}">更新</a></td>
+            <td><a href="{% url 'hr_tool:delete_precareer' precareer.id %}">削除</a></td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
 
 {% endblock %}
 

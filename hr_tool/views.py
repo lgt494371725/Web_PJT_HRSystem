@@ -47,3 +47,30 @@ def add_precareer(request, pk):
     }
 
     return render(request, 'precareer_form.html', context)
+
+
+def update_precareer(request, pk):
+    precareer = get_object_or_404(TPreCareer, pk=pk)
+    form = PreCareerCreateForm(request.POST or None, instance=precareer)
+
+    if request.method == 'POST' and form.is_valid():
+        form.save()
+        return redirect('hr_tool:edit_precareer', pk=precareer.eid.id)
+
+    context = {
+        'form': form
+    }
+    return render(request, 'precareer_form.html', context)
+
+
+def delete_precareer(request, pk):
+    precareer = get_object_or_404(TPreCareer, pk=pk)
+
+    if request.method == 'POST':
+        precareer.delete()
+        return redirect('hr_tool:edit_precareer', pk=precareer.eid.id)
+
+    context = {
+        'precareer': precareer,
+    }
+    return render(request, 'precareer_confirm_delete.html', context)
