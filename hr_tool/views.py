@@ -7,7 +7,8 @@ from django.contrib.auth.views import LoginView as BaseLoginView
 from django.contrib.auth.views import LogoutView as BaseLogoutView
 from django.core.paginator import Paginator
 from django.db import models
-from django.http import HttpResponse
+from django.forms.models import model_to_dict
+from django.http import HttpResponse, JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse_lazy
 
@@ -309,3 +310,51 @@ class LoginView(BaseLoginView):
 
 class LogoutView(BaseLogoutView):
     success_url = reverse_lazy('/login')
+
+
+
+def to_json(queryset):
+   return [model_to_dict(r) for r in queryset]
+
+def all_skills(request):
+    ret = MSkill.objects.all()
+    return JsonResponse(to_json(ret),safe=False)
+
+def all_skillCategories(request):
+    ret = MSkillCategory.objects.all()
+    return JsonResponse(to_json(ret),safe=False)
+
+def skills_in_categories(request,category_id):
+    ret = MSkill.objects.filter(skill_category=category_id)
+    return JsonResponse(to_json(ret),safe=False)
+
+def all_careerLevels(request):
+    ret = MCareerLevel.objects.all()
+    return JsonResponse(to_json(ret),safe=False)
+
+def all_industries(request):
+    ret = MIndustry.objects.all()
+    return JsonResponse(to_json(ret),safe=False)
+
+def all_dtes(request):
+    ret = MDte.objects.all()
+    return JsonResponse(to_json(ret),safe=False)
+
+def all_homeoffices(request):
+    ret = MHomeoffice.objects.all()
+    return JsonResponse(to_json(ret),safe=False)
+
+def dropdown_test(request):
+    return render(request, 'dropdown_test.html')
+
+def all_users(request):
+    users = []
+    for u in User.objects.all():
+        users.append({
+            '社員番号': u.id,
+            'DTE': u.dte.name,
+            'ML': u.career_level.level,
+            'Joining Date': u.join_of,
+            'Home Office': u.homeoffice.name
+            })
+    return JsonResponse(users, safe=False)
