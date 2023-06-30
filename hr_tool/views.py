@@ -50,7 +50,6 @@ def detail(request, pk):
 
     return render(request, 'detail.html', context)
 
-@login_required
 def signupuser(request):
     if request.method == 'GET':
         return render(request, 'hr_user/signupuser.html', {'form': SignUpForm()})
