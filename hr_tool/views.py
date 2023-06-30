@@ -13,14 +13,10 @@ from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse_lazy
 
 from .forms import (AssignExpCreateForm, LoginFrom, PivotTableForm,
-                    PreCareerCreateForm, SearchForm, SignUpForm)
+                    PreCareerCreateForm, SearchForm, SignUpForm,
+                    SkillCreateForm)
 from .models import *
-from .para import mapping_dict
-from .forms import PreCareerCreateForm
-from .forms import SkillCreateForm
-
-from .models import User, TPreCareer
-from .models import User, TSkill
+from .para import cross_query, generate_mapping_dict
 
 
 # Create your views here.
@@ -98,6 +94,7 @@ def analysis(request):
     4. normal: row=col=val!=None, but val wrong choice
     """
     try:
+        mapping_dict = generate_mapping_dict()
         pivot_table = None
         if request.method == 'POST':
             form = PivotTableForm(request.POST)
@@ -107,25 +104,31 @@ def analysis(request):
                 col = col if col else None  # col will be '' if no choose
                 val = form.cleaned_data['value']
                 agg_func = form.cleaned_data['agg_func']
+                # check is cross query
+                cand = ['assign_role', 'industry', 'skill']
+                if row in cand or col in cand:
+                    row_data, col_data, val_data= cross_query(row, col, val)
+                else:
                 # get records from db based on query
-                row_data = mapping_dict[row][1]
-                col_data = mapping_dict[col][1] if col else None
-                val_data = mapping_dict[val][1] if val else None
+                    row_data = mapping_dict[row][1]
+                    col_data = mapping_dict[col][1] if col else None
+                    val_data = mapping_dict[val][1] if val else None
                 if agg_func == "count":
                     val = "number"
                     val_data = [1]*len(row_data)
-                # print("row_data", row_data)
-                # print("col_data", col_data)
-                # print("val_data", val_data)
+                print("row_data", row_data)
+                print("col_data", col_data)
+                print("val_data", val_data)
                 df = pd.DataFrame({row: row_data,
                                 col: col_data,
                                 val: val_data})
                 # print(df)
-                # # create pivot table
+                # create pivot table
                 pivot_table = pd.pivot_table(df, values=val, index=row, columns=col, aggfunc=agg_func, fill_value=0)
-                # # transform to the html
+                # transform to the html
                 # print("table:\n", pivot_table)
-                pivot_table = pivot_table.to_html()
+                pivot_table = pivot_table.to_html(classes='table table-hover')
+                # print(pivot_table)
         else:
             form = PivotTableForm()
         context = {
@@ -134,8 +137,10 @@ def analysis(request):
         }
         return render(request, 'pivot_table.html', context)
     except Exception as e:
-        print(f"Wrong choices!! {type(e)}, error message:", e)
-        return render(request, 'pivot_table.html', {'pivot_table': e})
+        print(type(e))
+        message = "Wrong choices!!"+ "Error Type:"+type(e).__name__+", Message:" + str(e)
+        context  = {'pivot_table': message}
+        return render(request, 'pivot_table.html', context)
 
 
 def download_file_view(request):

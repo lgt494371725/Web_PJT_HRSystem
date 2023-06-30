@@ -10,7 +10,7 @@ class PivotTableForm(forms.Form):
         ('birth_year', '誕生日(年)'),
         ('birth_month', '誕生日(月)'),
         ('birth_year_month', '誕生日(年月)'),
-        ('career_level', 'career level'),
+        ('management_level', 'management_level'),
         ('home_office', 'home_office'),
         ('DTE', 'DTE'),
         ('skill', 'skill'),
@@ -18,8 +18,8 @@ class PivotTableForm(forms.Form):
         ('join_month', '入社日(月)'),
         ('join_year_month', '入社日(年月)'),
         ('assign_role', 'assign role'),
-        ('assign_experience', 'assign経験数'),
-        ('assign_industry', 'assign industry'),
+        ('num_projects', 'assign経験数'),
+        ('industry', 'assign industry'),
     ]
     AGG_CHOICES = [
         ('', '----'),
