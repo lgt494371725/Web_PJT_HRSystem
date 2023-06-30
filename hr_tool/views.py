@@ -16,6 +16,11 @@ from .forms import (AssignExpCreateForm, LoginFrom, PivotTableForm,
                     PreCareerCreateForm, SearchForm, SignUpForm)
 from .models import *
 from .para import mapping_dict
+from .forms import PreCareerCreateForm
+from .forms import SkillCreateForm
+
+from .models import User, TPreCareer
+from .models import User, TSkill
 
 
 # Create your views here.
@@ -161,6 +166,16 @@ def edit_precareer(request, pk):
     return render(request, 'precareer_edit.html', context)
 
 
+def edit_skill(request, pk):
+    skill = TSkill.objects.filter(eid=pk)
+
+    context = {
+        'pk': pk,
+        'skill': skill
+    }
+    return render(request, 'skill_edit.html', context)
+
+
 def add_precareer(request, pk):
     form = PreCareerCreateForm(request.POST or None)
     print(form.data)
@@ -221,8 +236,6 @@ def edit_assignexp(request, pk):
 
 def add_assignexp(request, pk):
     form = AssignExpCreateForm(request.POST or None)
-    print(form.data)
-    print(dir(form))
 
     if request.method == 'POST' and form.is_valid():
         employee = get_object_or_404(User, id=pk)
@@ -356,5 +369,40 @@ def all_users(request):
             'ML': u.career_level.level,
             'Joining Date': u.join_of,
             'Home Office': u.homeoffice.name
-            })
+        })
     return JsonResponse(users, safe=False)
+
+def add_skill(request, pk):
+    form = SkillCreateForm(request.POST or None)
+    print(form.data)
+    print(dir(form))
+
+    if request.method == 'POST' and form.is_valid():
+        employee = get_object_or_404(User, id=pk)
+        skill = form.save(commit=False)
+        skill.eid = employee
+        skill.save()
+        return redirect('hr_tool:edit_skill', pk=pk)
+
+    context = {
+        'form': form
+    }
+
+    return render(request, 'skill_form.html', context)
+
+def update_skill(request, pk):
+    form = SkillCreateForm(request.POST or None)
+    print(form.data)
+    print(dir(form))
+    if request.method == 'POST' and form.is_valid():
+        employee = get_object_or_404(User, id=pk)
+        skill = form.save(commit=False)
+        skill.eid = employee
+        skill.save()
+        return redirect('hr_tool:detail', pk=pk)
+
+    context = {
+        'form': form
+    }
+
+    return render(request, 'skill_form.html', context)

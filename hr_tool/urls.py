@@ -28,5 +28,11 @@ urlpatterns = [
     path('all_homeoffices/', views.all_homeoffices, name='all_industries'),
     path('all_dtes/', views.all_dtes, name='all_dtes'),
     path('skills_in_categories/', views.skills_in_categories, name='skills_in_categories'),
-    path('all_users/', views.all_users, name='all_users')
+    path('all_users/', views.all_users, name='all_users'),
+    path('detail/<int:pk>/', views.detail, name='detail'),
+    path('detail/<str:pk>/edit_precareer/', views.edit_precareer, name='edit_pre_career'),
+    path('detail/<str:pk>/add_precareer/', views.add_precareer, name='add_pre_career'),
+    path('detail/<str:pk>/edit_skill/', views.edit_skill, name='edit_skill'),
+    path('detail/<str:pk>/add_skill/', views.add_skill, name='add_skill'),
+    path('detail/<str:pk>/update_skill/', views.update_skill, name='update_skill'),
 ]

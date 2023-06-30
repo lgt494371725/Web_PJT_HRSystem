@@ -6,7 +6,7 @@ function createDropdown(data, dropdownId, placeholder = '選択してくださ�
         allowClear: true,
         closeOnSelect: true
     });
-    
+
     $(dropdownId).val(null).trigger('change');
 }
 
@@ -14,22 +14,22 @@ function createDropdown(data, dropdownId, placeholder = '選択してくださ�
 function setupColumnFilters(settings) {
     settings.api().columns().every(function () {
         let column = this;
- 
+
         let filterIcon = $(`<i class="fas fa-filter" style="cursor:pointer; font-size: 0.8em; margin-left: 4px;"></i>`);
         let header = $(column.header());
         header.css('white-space', 'nowrap');
         header.append(filterIcon);
- 
+
         let dropdownMenu = $(
             `<div class="dropdown-menu" style="position: absolute; z-index: 1050;">
             <a class="dropdown-item" href="#">All</a>
             </div>`
         ).appendTo('body');
- 
+
         column.data().unique().sort().each(function (d, j) {
             dropdownMenu.append('<a class="dropdown-item" href="#">' + d + '</a>');
         });
- 
+
         filterIcon.on('click', function (event) {
             event.stopPropagation();
             dropdownMenu.css({
@@ -38,20 +38,20 @@ function setupColumnFilters(settings) {
                 left: filterIcon.offset().left
             });
         });
- 
+
         dropdownMenu.on('click', '.dropdown-item', function (event) {
             event.preventDefault();
             let val = $.fn.dataTable.util.escapeRegex($(this).text());
             column.search(val !== 'All' ? '^' + val + '$' : '', true, false).draw();
             dropdownMenu.hide();
- 
+
             if (val !== 'All') {
                 filterIcon.addClass('filter-active');
             } else {
                 filterIcon.removeClass('filter-active');
             }
         });
- 
+
         $(document).on('click', function (event) {
             if (!filterIcon.is(event.target) && filterIcon.has(event.target).length === 0 &&
                 !dropdownMenu.is(event.target) && dropdownMenu.has(event.target).length === 0) {
@@ -61,18 +61,19 @@ function setupColumnFilters(settings) {
     });
  }
 
- 
+
 function createTable(data, tableId, detailUrl = null) {
         // Destroy the table if it already exists
         if ($.fn.DataTable.isDataTable(tableId)) {
             $(tableId).DataTable().destroy();
         }
-        //Get the column names from the data.    
+        //Get the column names from the data.
         let columns = [];
         if (data && data.length > 0) {
             columns = Object.keys(data[0]).map(key => {
                 // Hide the id column
-                if (key === 'id' || key === 'EID') {
+                console.log(key)
+                if (key === 'id' || key === '社員番号') {
                     if (detailUrl) {
                         console.log(key)
                         return {
@@ -93,7 +94,7 @@ function createTable(data, tableId, detailUrl = null) {
                 return { data: key, title: key };
             });
         }
-    
+
         // Create the table with the data and column names
         let table = $(tableId).DataTable({
             data: data,

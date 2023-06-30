@@ -96,3 +96,10 @@ class SignUpForm(UserCreationForm):
 class LoginFrom(AuthenticationForm):
     class Meta:
         model = User
+
+
+class SkillCreateForm(forms.ModelForm):
+    class Meta:
+        model = TSkill
+        fields = ('skill', 'updated_date')
+
