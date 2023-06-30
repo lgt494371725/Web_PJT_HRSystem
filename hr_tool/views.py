@@ -1,17 +1,24 @@
 from urllib.parse import unquote
 
 import pandas as pd
+from django.contrib.auth import login
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.views import LoginView as BaseLoginView
+from django.contrib.auth.views import LogoutView as BaseLogoutView
 from django.core.paginator import Paginator
 from django.db import models
 from django.http import HttpResponse
 from django.shortcuts import get_object_or_404, redirect, render
+from django.urls import reverse_lazy
 
-from .forms import (AssignExpCreateForm, PivotTableForm, PreCareerCreateForm,
-                    SearchForm)
+from .forms import (AssignExpCreateForm, LoginFrom, PivotTableForm,
+                    PreCareerCreateForm, SearchForm, SignUpForm)
 from .models import *
 from .para import mapping_dict
 
 
+# Create your views here.
+@login_required
 def employee_list(request):
     form = SearchForm(request.GET)
     employees = User.objects.all()
@@ -36,7 +43,7 @@ def employee_list(request):
     }
     return render(request, 'list.html',context)
 
-
+@login_required
 def detail(request, pk):
     employee = get_object_or_404(User, id=pk)
     print("get:", employee)
@@ -68,7 +75,8 @@ def detail(request, pk):
         'employee_data': employee_data,
         'pre_careers': pre_careers,
         'skills': skills,
-        'assigns': assigns
+        'assigns': assigns,
+        'employee_id':employee.pk
     }
 
     return render(request, 'detail.html', context)
@@ -256,3 +264,42 @@ def delete_assignexp(request, pk):
         'assignexp': assignexp
     }
     return render(request, 'assignexp_confirm_delete.html', context)
+
+@login_required
+def signupuser(request):
+    if request.method == 'GET':
+        return render(request, 'hr_user/signupuser.html', {'form': SignUpForm()})
+    else:
+        if request.POST['password1'] == request.POST['password2']:
+            # try:
+                homeoffice = MHomeoffice.objects.get(id=request.POST['homeoffice'])
+                dte = MDte.objects.get(id=request.POST['dte'])
+
+                user = User.objects.create_user(
+                    request.POST['id'],
+                    first_name=request.POST['first_name'],
+                    last_name=request.POST['last_name'],
+                    middle_name=request.POST['middle_name'],
+                    password=request.POST['password1'],
+                    birthday=request.POST['birthday'],
+                    dte=dte,
+                    homeoffice=homeoffice
+                )
+                user.save()
+                login(request, user)
+                return redirect('hr_tool:detail', pk=request.POST['id'])
+            # except IntegrityError:
+            #     return render(request, 'hr_user/signupuser.html',
+            #                 {'form': SignUpForm(), 'error': 'Password didnt match.'}
+            #                 )
+
+def signup(request):
+    return render(request, 'hr_tool/signupuser.html')
+
+
+class LoginView(BaseLoginView):
+    form_class = LoginFrom
+    template_name = 'hr_user/login.html'
+
+class LogoutView(BaseLogoutView):
+    success_url = reverse_lazy('/login')

@@ -1,5 +1,8 @@
 from django import forms
+from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
+
 from .models import *
+
 
 class PivotTableForm(forms.Form):
     CHOICES = [
@@ -64,3 +67,30 @@ class AssignExpCreateForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super(AssignExpCreateForm, self).__init__(*args, **kwargs)
         self.fields['project'].queryset = TProject.objects.all()
+
+
+class SignUpForm(UserCreationForm):
+    class Meta:
+        model = User
+        fields = (
+            'id',
+            'last_name',
+            'first_name',
+            'middle_name',
+            'birthday',
+            'dte',
+            'homeoffice',
+            'password1',
+            'password2'
+        )
+
+
+    def __init__(self, *args, **kwargs):
+        super(SignUpForm, self).__init__(*args, **kwargs)
+        self.fields['dte'].queryset = MDte.objects.all()
+        self.fields['homeoffice'].queryset = MHomeoffice.objects.all()
+
+
+class LoginFrom(AuthenticationForm):
+    class Meta:
+        model = User
