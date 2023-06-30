@@ -2,7 +2,7 @@ from django.db import models
 from django.contrib.auth.models import AbstractBaseUser
 
 
-# マスタテーブル
+# マスタテーブルjoin_month
 class MSkillCategory(models.Model):
     id = models.AutoField('スキルカテゴリid', primary_key=True)
     name = models.CharField('スキルカテゴリ名前', max_length=64, unique=True)
@@ -19,13 +19,15 @@ class MSkill(models.Model):
     def __str__(self):
         return self.name
 
+
 class MCareerLevel(models.Model):
-    id = models.SmallAutoField('キャリアレベルid', primary_key=True)
-    name = models.CharField('キャリアレベルの名称', max_length=64)
-    level = models.SmallIntegerField('キャリアレベル')
+    id = models.SmallAutoField('マネジメントレベルid', primary_key=True)
+    name = models.CharField('マネジメントレベルの名称', max_length=64)
+    level = models.SmallIntegerField('マネジメントレベル')
 
     def __str__(self):
         return f'{self.name} (ML: {self.level})'
+
 
 class MIndustry(models.Model):
     id = models.SmallIntegerField('インダストリid', primary_key=True)
@@ -34,12 +36,14 @@ class MIndustry(models.Model):
     def __str__(self):
         return self.name
 
+
 class MDte(models.Model):
     id = models.SmallIntegerField('部門id', primary_key=True)
     name = models.CharField('部門名', max_length=64, unique=True)
 
     def __str__(self):
         return self.name
+
 
 class MHomeoffice(models.Model):
     id = models.SmallIntegerField('ホームオフィスid', primary_key=True)
@@ -60,10 +64,10 @@ class User(AbstractBaseUser):
     middle_name = models.CharField('ミドルネーム', max_length=32, blank=True, null=True)
     birthday = models.DateField('誕生日')
 
-    career_level = models.ForeignKey(MCareerLevel, verbose_name='キャリアレベル', on_delete=models.PROTECT, to_field='id', related_name='user_cl')
+    career_level = models.ForeignKey(MCareerLevel, verbose_name='マネジメントレベル', on_delete=models.PROTECT, to_field='id', related_name='user_cl')
     is_hr = models.BooleanField()
     join_of = models.DateField('入社日')
-    homeoffice_id = models.ForeignKey(MHomeoffice, on_delete=models.PROTECT, to_field='id', related_name='user_homeoffice')
+    homeoffice = models.ForeignKey(MHomeoffice, on_delete=models.PROTECT, to_field='id', related_name='user_homeoffice')
     dte = models.ForeignKey(MDte, on_delete=models.PROTECT, to_field='id', related_name='user_dte')
 
     USERNAME_FIELD = 'id'
@@ -84,7 +88,7 @@ class TPreCareer(models.Model):
     exp_detail = models.TextField('経験詳細', max_length=512)
 
     def __str__(self):
-        return self.id
+        return self.exp_detail
 
 
 class TAccount(models.Model):
@@ -130,11 +134,11 @@ class TTraining(models.Model):
 
 class TTrainingExp(models.Model):
     id = models.AutoField('トレーニング経験id', primary_key=True)
-    training_id = models.ForeignKey(TTraining, verbose_name='トレーニング', on_delete=models.CASCADE, to_field='id', related_name='t_training_exp_training')
+    training = models.ForeignKey(TTraining, verbose_name='トレーニング', on_delete=models.CASCADE, to_field='id', related_name='t_training_exp_training')
     eid = models.ForeignKey(User, verbose_name='社員番号', on_delete=models.CASCADE, to_field='id', related_name='t_training_exp_eid')
 
     def __str__(self):
-        return f'{self.eid.last_name} の {self.training_id.name}'
+        return f'{self.eid.last_name} の {self.training.name}'
 
 
 class TSkill(models.Model):

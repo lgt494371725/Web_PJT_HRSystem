@@ -187,7 +187,7 @@
             "career_level": 11,
             "is_hr": false,
             "join_of": "2023-06-28",
-            "homeoffice_id": 0,
+            "homeoffice": 0,
             "dte": 0
         }
     },
@@ -243,7 +243,7 @@
         "model": "hr_tool.ttrainingexp",
         "pk": 1,
         "fields": {
-            "training_id": 0,
+            "training": 0,
             "eid": "12345678"
         }
     },
