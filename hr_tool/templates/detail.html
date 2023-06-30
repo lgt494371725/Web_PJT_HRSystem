@@ -7,9 +7,17 @@
 
 <a href="{% url 'hr_tool:edit_pre_career' pk %}">経験編集画面</a>
 
+<a href="{% url 'hr_tool:edit_skill' pk %}">スキル編集画面</a>
+
 <p>
 {% for precareer in precareers %}
     <p>{{ precareer }}</p>
 {% endfor %}
 </p>
+
+<p>
+    {% for skill in skill %}
+        <p>{{ skill }}</p>
+    {% endfor %}
+    </p>
 {% endblock %}
