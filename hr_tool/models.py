@@ -61,7 +61,6 @@ class UserManager(BaseUserManager):
         import datetime
         extra_fields.setdefault('birthday', datetime.date(1970, 1, 1))
         extra_fields['join_of'] = datetime.date.today()
-        extra_fields['is_hr'] = False
         extra_fields['career_level'] = MCareerLevel.objects.filter(level=11)[0]
 
         print(extra_fields)

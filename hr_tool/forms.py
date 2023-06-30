@@ -80,6 +80,7 @@ class SignUpForm(UserCreationForm):
             'birthday',
             'dte',
             'homeoffice',
+            'is_hr',
             'password1',
             'password2'
         )
@@ -89,6 +90,7 @@ class SignUpForm(UserCreationForm):
         super(SignUpForm, self).__init__(*args, **kwargs)
         self.fields['dte'].queryset = MDte.objects.all()
         self.fields['homeoffice'].queryset = MHomeoffice.objects.all()
+        self.fields['is_hr'].label = 'HRの方はチェック'
 
 
 class LoginFrom(AuthenticationForm):

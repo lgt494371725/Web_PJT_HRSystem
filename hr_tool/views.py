@@ -265,7 +265,7 @@ def delete_assignexp(request, pk):
     }
     return render(request, 'assignexp_confirm_delete.html', context)
 
-@login_required
+
 def signupuser(request):
     if request.method == 'GET':
         return render(request, 'hr_user/signupuser.html', {'form': SignUpForm()})
@@ -275,6 +275,10 @@ def signupuser(request):
                 homeoffice = MHomeoffice.objects.get(id=request.POST['homeoffice'])
                 dte = MDte.objects.get(id=request.POST['dte'])
 
+                print(request.POST)
+
+
+
                 user = User.objects.create_user(
                     request.POST['id'],
                     first_name=request.POST['first_name'],
@@ -282,6 +286,7 @@ def signupuser(request):
                     middle_name=request.POST['middle_name'],
                     password=request.POST['password1'],
                     birthday=request.POST['birthday'],
+                    is_hr=('is_hr' in request.POST),
                     dte=dte,
                     homeoffice=homeoffice
                 )
@@ -300,6 +305,7 @@ def signup(request):
 class LoginView(BaseLoginView):
     form_class = LoginFrom
     template_name = 'hr_user/login.html'
+
 
 class LogoutView(BaseLogoutView):
     success_url = reverse_lazy('/login')
