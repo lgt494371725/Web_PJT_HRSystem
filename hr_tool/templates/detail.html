@@ -4,12 +4,18 @@
 ここに詳細画面を表示する。
 
 
-
-<a href="{% url 'hr_tool:add_pre_career' pk %}">経験を追加はここをクリック。</a>
-
+<p></p>
+<a href="{% url 'hr_tool:pre_career' pk %}">経験をUpdateするにはここをクリック。</a>
+<p></p>
+<a href="{% url 'hr_tool:assign_exp' pk %}">アサイン経験をUpdateするにはここをクリック。</a>
 <p>
 {% for precareer in precareers %}
     <p>{{ precareer }}</p>
+{% endfor %}
+</p>
+<p>
+{% for assign_exp in assign_exps %}
+    <p>{{ assign_exp }}</p>
 {% endfor %}
 </p>
 {% endblock %}

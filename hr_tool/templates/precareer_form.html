@@ -1,10 +1,28 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<form action="" method="POST" enctype="multipart/form-data">
-    {{ form.as_p }}
-    <button type="submit" class="btn btn-primary">送信</button>
-    {% csrf_token %}
-</form>
-{% endblock %}
+<h1>個人経験編集画面</h1>
+<button><a href="{% url 'hr_tool:add_pre_career' pk %}">Add</a></button>
 
+<table class="table">
+<thead>
+    <tr>
+    <th>Experience</th>
+    <th>role</th>
+    <th>開始日</th>
+    <th>終了日</th>
+    <th>#</th>
+    <th>#</th>
+    </tr>
+</thead>
+<tbody>
+    <tr>
+    <td><a href="{% url 'hr_tool:add_pre_career' pk %}">{{ exp_detail }}</a></td>
+    <td>{{ role }}</td>
+    <td><a href="{% url 'hr_tool:update_pre_career' pk %}">更新</a></td>
+    <td><a href="{% url 'hr_tool:delete_pre_career' pk %}">削除</a></td>
+    </tr>
+</tbody>
+</table>
+
+{% endblock %}
