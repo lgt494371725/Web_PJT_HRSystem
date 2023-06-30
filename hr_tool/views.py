@@ -15,7 +15,6 @@ def employee_list(request):
     print(form)
     if form.is_valid():
         query = form.cleaned_data['Search']
-        print('abc',query)
         employees = User.objects.all() 
         employees = employees.filter(models.Q(id__icontains=query))
     else:
@@ -37,6 +36,7 @@ def employee_list(request):
 
 def detail(request, pk):
     employee = get_object_or_404(User, id=pk)
+    print("get:", employee)
     eid = employee.first_name
     if employee.middle_name:
         eid += f'.{employee.middle_name}'
