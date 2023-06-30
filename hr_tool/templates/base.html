@@ -27,8 +27,6 @@
       <nav class="navbar bg-primary navbar-dark">
         <a class="nav-link text-white" href="{% url 'hr_tool:list' %}">一覧</a>
 
-        {{user.is_hr}}
-
         {% if user.is_hr %}
         <a class="nav-link text-white" href = "/admin">Admin</a>
         {% endif %}
