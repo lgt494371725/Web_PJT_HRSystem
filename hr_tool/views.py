@@ -1,20 +1,20 @@
-from django.shortcuts import render
-from django.shortcuts import get_object_or_404, redirect, render
-from .models import User, TPreCareer, TSkill, TAssignExp, MDte, MHomeoffice
-from django.shortcuts import render, redirect
-from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import login
-from django.db import IntegrityError
-from .forms import SignUpForm, LoginFrom
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth.views import LoginView as BaseLoginView
 from django.contrib.auth.views import LogoutView as BaseLogoutView
+from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse_lazy
 
+from .forms import LoginFrom, SignUpForm
+from .models import MDte, MHomeoffice, TAssignExp, TPreCareer, TSkill, User
+
+
 # Create your views here.
+@login_required
 def employee_list(request):
     return render(request, 'list.html')
 
-
+@login_required
 def detail(request, pk):
     employee = get_object_or_404(User, id=pk)
     eid = employee.first_name
@@ -50,6 +50,7 @@ def detail(request, pk):
 
     return render(request, 'detail.html', context)
 
+@login_required
 def signupuser(request):
     if request.method == 'GET':
         return render(request, 'hr_user/signupuser.html', {'form': SignUpForm()})
