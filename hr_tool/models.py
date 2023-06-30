@@ -21,9 +21,9 @@ class MSkill(models.Model):
 
 
 class MCareerLevel(models.Model):
-    id = models.SmallAutoField('キャリアレベルid', primary_key=True)
-    name = models.CharField('キャリアレベルの名称', max_length=64)
-    level = models.SmallIntegerField('キャリアレベル')
+    id = models.SmallAutoField('マネジメントレベルid', primary_key=True)
+    name = models.CharField('マネジメントレベルの名称', max_length=64)
+    level = models.SmallIntegerField('マネジメントレベル')
 
     def __str__(self):
         return f'{self.name} (ML: {self.level})'
@@ -64,7 +64,7 @@ class User(AbstractBaseUser):
     middle_name = models.CharField('ミドルネーム', max_length=32, blank=True, null=True)
     birthday = models.DateField('誕生日')
 
-    career_level = models.ForeignKey(MCareerLevel, verbose_name='キャリアレベル', on_delete=models.PROTECT, to_field='id', related_name='user_cl')
+    career_level = models.ForeignKey(MCareerLevel, verbose_name='マネジメントレベル', on_delete=models.PROTECT, to_field='id', related_name='user_cl')
     is_hr = models.BooleanField()
     join_of = models.DateField('入社日')
     homeoffice = models.ForeignKey(MHomeoffice, on_delete=models.PROTECT, to_field='id', related_name='user_homeoffice')
