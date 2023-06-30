@@ -1,23 +1,53 @@
+from urllib.parse import unquote
+
+import pandas as pd
 from django.contrib.auth import login
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.contrib.auth.views import LoginView as BaseLoginView
 from django.contrib.auth.views import LogoutView as BaseLogoutView
+from django.core.paginator import Paginator
+from django.db import models
+from django.http import HttpResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse_lazy
 
-from .forms import LoginFrom, SignUpForm
-from .models import MDte, MHomeoffice, TAssignExp, TPreCareer, TSkill, User
+from .forms import (AssignExpCreateForm, LoginFrom, PivotTableForm,
+                    PreCareerCreateForm, SearchForm, SignUpForm)
+from .models import *
+from .para import mapping_dict
 
 
 # Create your views here.
 @login_required
 def employee_list(request):
-    return render(request, 'list.html')
+    form = SearchForm(request.GET)
+    employees = User.objects.all()
+    print(form)
+    if form.is_valid():
+        query = form.cleaned_data['Search']
+        employees = User.objects.all()
+        employees = employees.filter(models.Q(id__icontains=query))
+    else:
+        employees = User.objects.all()
+    paginator = Paginator(employees, 3)
+    page_number = request.GET.get('page', 1)
+    try:
+        page_number = max(1, int(page_number))
+    except ValueError:
+        page_number = 1
+    page_obj = paginator.get_page(page_number)
+    context = {
+        'page_obj': page_obj,
+        'employees':employees,
+        'form': form
+    }
+    return render(request, 'list.html',context)
 
 @login_required
 def detail(request, pk):
     employee = get_object_or_404(User, id=pk)
+    print("get:", employee)
     eid = employee.first_name
     if employee.middle_name:
         eid += f'.{employee.middle_name}'
@@ -29,7 +59,7 @@ def detail(request, pk):
         ('氏', employee.last_name),
         ('名', employee.first_name),
         ('キャリア名', employee.career_level.name),
-        ('キャリアレベル', employee.career_level.level),
+        ('マネジメントレベル', employee.career_level.level),
         ('入社日', employee.join_of),
         ('ホームオフィス', employee.homeoffice.name),
         ('メールアドレス', f'{eid}@accenture.com'),
@@ -42,6 +72,7 @@ def detail(request, pk):
 
 
     context = {
+        'pk': pk,
         'employee_data': employee_data,
         'pre_careers': pre_careers,
         'skills': skills,
@@ -50,6 +81,191 @@ def detail(request, pk):
     }
 
     return render(request, 'detail.html', context)
+
+
+# pivot table analysis page
+def analysis(request):
+    """
+    situation:
+    1. cate counts: row != None, col = val = None
+    2. cate counts: but wrong choose
+    3. cate counts: row = col != None, val = None
+    4. normal: row=col=val!=None, but val wrong choice
+    """
+    try:
+        pivot_table = None
+        if request.method == 'POST':
+            form = PivotTableForm(request.POST)
+            if form.is_valid():
+                row = form.cleaned_data['row']
+                col = form.cleaned_data['column']
+                col = col if col else None  # col will be '' if no choose
+                val = form.cleaned_data['value']
+                agg_func = form.cleaned_data['agg_func']
+                # get records from db based on query
+                row_data = mapping_dict[row][1]
+                col_data = mapping_dict[col][1] if col else None
+                val_data = mapping_dict[val][1] if val else None
+                if agg_func == "count":
+                    val = "number"
+                    val_data = [1]*len(row_data)
+                # print("row_data", row_data)
+                # print("col_data", col_data)
+                # print("val_data", val_data)
+                df = pd.DataFrame({row: row_data,
+                                col: col_data,
+                                val: val_data})
+                # print(df)
+                # # create pivot table
+                pivot_table = pd.pivot_table(df, values=val, index=row, columns=col, aggfunc=agg_func, fill_value=0)
+                # # transform to the html
+                # print("table:\n", pivot_table)
+                pivot_table = pivot_table.to_html()
+        else:
+            form = PivotTableForm()
+        context = {
+            'form': form,
+            'pivot_table': pivot_table
+        }
+        return render(request, 'pivot_table.html', context)
+    except Exception as e:
+        print(f"Wrong choices!! {type(e)}, error message:", e)
+        return render(request, 'pivot_table.html', {'pivot_table': e})
+
+
+def download_file_view(request):
+    pivot_table_data = unquote(request.GET.get('pivot_table', ''))
+
+    if pivot_table_data:
+        pivot_table_data = pd.read_html(pivot_table_data)[0]
+        pivot_table_data = pivot_table_data.to_csv(index=False)
+        response = HttpResponse(content_type='text/csv')
+        response['Content-Disposition'] = 'attachment; filename="pivot_table.csv"'
+
+        # 将pivot table数据写入响应
+        response.write(pivot_table_data)
+
+        return response
+    else:
+        # 如果没有pivot table数据，则返回错误响应或重定向到其他页面
+        return HttpResponse("Error: Pivot table data is missing.", content_type='text/plain')
+
+
+def edit_precareer(request, pk):
+    precareers = TPreCareer.objects.filter(eid=pk)
+
+    context = {
+        'pk': pk,
+        'precareers': precareers
+    }
+    return render(request, 'precareer_edit.html', context)
+
+
+def add_precareer(request, pk):
+    form = PreCareerCreateForm(request.POST or None)
+    print(form.data)
+    print(dir(form))
+
+    if request.method == 'POST' and form.is_valid():
+        employee = get_object_or_404(User, id=pk)
+        precareer = form.save(commit=False)
+        precareer.eid = employee
+        precareer.save()
+        return redirect('hr_tool:edit_precareer', pk=pk)
+
+    context = {
+        'form': form,
+        'eid': pk
+    }
+
+    return render(request, 'precareer_form.html', context)
+
+
+def update_precareer(request, pk):
+    precareer = get_object_or_404(TPreCareer, pk=pk)
+    form = PreCareerCreateForm(request.POST or None, instance=precareer)
+
+    if request.method == 'POST' and form.is_valid():
+        form.save()
+        return redirect('hr_tool:edit_precareer', pk=precareer.eid.id)
+
+    context = {
+        'form': form,
+        'eid': precareer.eid.id
+    }
+    return render(request, 'precareer_form.html', context)
+
+
+def delete_precareer(request, pk):
+    precareer = get_object_or_404(TPreCareer, pk=pk)
+
+    if request.method == 'POST':
+        precareer.delete()
+        return redirect('hr_tool:edit_precareer', pk=precareer.eid.id)
+
+    context = {
+        'precareer': precareer,
+    }
+    return render(request, 'precareer_confirm_delete.html', context)
+
+
+def edit_assignexp(request, pk):
+    assignexps = TAssignExp.objects.filter(eid=pk)
+
+    context = {
+        'pk': pk,
+        'assignexps': assignexps
+    }
+    return render(request, 'assignexp_edit.html', context)
+
+
+def add_assignexp(request, pk):
+    form = AssignExpCreateForm(request.POST or None)
+    print(form.data)
+    print(dir(form))
+
+    if request.method == 'POST' and form.is_valid():
+        employee = get_object_or_404(User, id=pk)
+        assignexp = form.save(commit=False)
+        assignexp.eid = employee
+        assignexp.save()
+        return redirect('hr_tool:edit_assignexp', pk=pk)
+
+    context = {
+        'form': form,
+        'eid': pk
+    }
+
+    return render(request, 'assignexp_form.html', context)
+
+
+def update_assignexp(request, pk):
+    assignexp = get_object_or_404(TAssignExp, pk=pk)
+    form = AssignExpCreateForm(request.POST or None, instance=assignexp)
+
+    if request.method == 'POST' and form.is_valid():
+        form.save()
+        return redirect('hr_tool:edit_assignexp', pk=assignexp.eid.id)
+
+    context = {
+        'form': form,
+        'eid': assignexp.eid.id
+    }
+    return render(request, 'assignexp_form.html', context)
+
+
+def delete_assignexp(request, pk):
+    assignexp = get_object_or_404(TAssignExp, pk=pk)
+
+    if request.method == 'POST':
+        assignexp.delete()
+        return redirect('hr_tool:edit_assignexp', pk=assignexp.eid.id)
+
+    context = {
+        'assignexp': assignexp
+    }
+    return render(request, 'assignexp_confirm_delete.html', context)
+
 
 def signupuser(request):
     if request.method == 'GET':
@@ -60,6 +276,10 @@ def signupuser(request):
                 homeoffice = MHomeoffice.objects.get(id=request.POST['homeoffice'])
                 dte = MDte.objects.get(id=request.POST['dte'])
 
+                print(request.POST)
+
+
+
                 user = User.objects.create_user(
                     request.POST['id'],
                     first_name=request.POST['first_name'],
@@ -67,6 +287,7 @@ def signupuser(request):
                     middle_name=request.POST['middle_name'],
                     password=request.POST['password1'],
                     birthday=request.POST['birthday'],
+                    is_hr=('is_hr' in request.POST),
                     dte=dte,
                     homeoffice=homeoffice
                 )
@@ -86,6 +307,6 @@ class LoginView(BaseLoginView):
     form_class = LoginFrom
     template_name = 'hr_user/login.html'
 
+
 class LogoutView(BaseLogoutView):
     success_url = reverse_lazy('/login')
-

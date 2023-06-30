@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+
+{% block content %}
+<form method="post">
+    {% csrf_token %}
+    {{ form }}
+    <button type="submit">Analysis</button>
+</form>
+
+
+<div id="pivot-table-result">
+    {% if pivot_table %}
+        {{ pivot_table|safe }}
+        <!-- <a href="{% url 'hr_tool:download_file' %}">Export CSV</a> -->
+        <button type="submit"><a href="{% url 'hr_tool:download_file' %}?pivot_table={{ pivot_table|urlencode }}">Export CSV</a></button>
+    {% else %}
+        <p>No result.</p>
+    {% endif %}
+</div>
+
+
+{% endblock %}
+

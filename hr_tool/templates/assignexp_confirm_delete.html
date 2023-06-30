@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<form action="" method="POST">
+    <table class="table">
+        <tr>
+          <th>role</th>
+          <td>{{ assignexp.role }}</td>
+        </tr>
+        <tr>
+          <th>開始日</th>
+          <td>{{ assignexp.start_date }}</td>
+        </tr>
+        <tr>
+          <th>終了日</th>
+          <td>{{ assignexp.end_date }}</td>
+        </tr>
+        <tr>
+          <th>Experience</th>
+          <td>{{ assignexp.project.name }}</td>
+        </tr>
+    </table>
+    <p>こちらのデータを削除します。</p>
+    <button type="submit" class="btn btn-danger">送信</button>
+    <a class="button btn btn-secondary" href="{% url 'hr_tool:edit_assignexp' assignexp.eid.id %}">キャンセル</a>
+    {% csrf_token %}
+</form>
+{% endblock %}

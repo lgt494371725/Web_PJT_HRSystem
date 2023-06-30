@@ -12,6 +12,7 @@
   <body>
     <div class="container">
       <nav class="navbar bg-primary">
+        <span class="navbar-brand mb-0 h3 text-white">Employee Management System</span>
         <ul class="navbar-nav mr-auto">
           <a class="nav-link text-white" href="{% url 'hr_tool:list' %}">一覧</a>
           {% if user.is_hr %}

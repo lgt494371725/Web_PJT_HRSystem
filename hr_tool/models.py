@@ -2,7 +2,7 @@ from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin
 
 
-# マスタテーブル
+# マスタテーブルjoin_month
 class MSkillCategory(models.Model):
     id = models.AutoField('スキルカテゴリid', primary_key=True)
     name = models.CharField('スキルカテゴリ名前', max_length=64, unique=True)
@@ -21,9 +21,9 @@ class MSkill(models.Model):
 
 
 class MCareerLevel(models.Model):
-    id = models.SmallAutoField('キャリアレベルid', primary_key=True)
-    name = models.CharField('キャリアレベルの名称', max_length=64)
-    level = models.SmallIntegerField('キャリアレベル')
+    id = models.SmallAutoField('マネジメントレベルid', primary_key=True)
+    name = models.CharField('マネジメントレベルの名称', max_length=64)
+    level = models.SmallIntegerField('マネジメントレベル')
 
     def __str__(self):
         return f'{self.name} (ML: {self.level})'
@@ -61,7 +61,6 @@ class UserManager(BaseUserManager):
         import datetime
         extra_fields.setdefault('birthday', datetime.date(1970, 1, 1))
         extra_fields['join_of'] = datetime.date.today()
-        extra_fields['is_hr'] = False
         extra_fields['career_level'] = MCareerLevel.objects.filter(level=11)[0]
 
         print(extra_fields)
@@ -108,7 +107,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     middle_name = models.CharField('ミドルネーム', max_length=32, blank=True, null=True)
     birthday = models.DateField('誕生日')
 
-    career_level = models.ForeignKey(MCareerLevel, verbose_name='キャリアレベル', on_delete=models.PROTECT, to_field='id', related_name='user_cl')
+    career_level = models.ForeignKey(MCareerLevel, verbose_name='マネジメントレベル', on_delete=models.PROTECT, to_field='id', related_name='user_cl')
     is_hr = models.BooleanField()
     join_of = models.DateField('入社日')
     homeoffice = models.ForeignKey(MHomeoffice, on_delete=models.PROTECT, to_field='id', related_name='user_homeoffice')
@@ -129,7 +128,7 @@ class User(AbstractBaseUser, PermissionsMixin):
 
 class TPreCareer(models.Model):
     id = models.AutoField('入社前経験id', primary_key=True)
-    eid = models.ForeignKey(User, verbose_name='社員番号', on_delete=models.CASCADE, to_field='id', related_name='t_pre_career_eid')
+    eid = models.ForeignKey(User, verbose_name='社員番号', on_delete=models.CASCADE, to_field='id', related_name='t_precareer_eid')
     role = models.CharField('ロール', max_length=64)
     start_date = models.DateField('開始日')
     end_date = models.DateField('終了日')
