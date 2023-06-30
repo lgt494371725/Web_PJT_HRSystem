@@ -1,7 +1,23 @@
 {% extends "base.html" %}
 
 {% block content %}
-ここに社員リストを表示する。
+
+<h1>Employee Management System</h1>
+
+
+
+<div>
+    <table class="table table-striped table-bordered table-hover" id="employees" style="width:100%">
+    </table>
+</div>
+
+
+{% endblock %}
+
+{%block js_code%}
+<script>  
+    setUsersTable('#employees', detailUrl='/hr_tool/user/')
+</script>
 {% endblock %}
 
 
