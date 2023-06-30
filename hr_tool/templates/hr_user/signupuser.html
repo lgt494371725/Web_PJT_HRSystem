@@ -1,18 +1,16 @@
 {% extends "base.html" %}
 
 {% block content %}
+<a class="nav-link" href="{% url 'login' %}">← Log In</a>
 <h1>Sign Up</h1>
-<h2> {{error}}</h2>
 <form method="POST">
     {% csrf_token %}
     {{ form.as_p }}
     <button type="submit">Sign Up</button>
 </form>
 
-
 <script>
     window.onload = () => {
-        console.log('hoge')
         $(function() {
             $( "#id_birthday" ).datepicker({
                 changeMonth: true,

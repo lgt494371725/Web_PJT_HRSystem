@@ -7,6 +7,8 @@ from django.contrib.auth import login
 from django.db import IntegrityError
 from .forms import SignUpForm, LoginFrom
 from django.contrib.auth.views import LoginView as BaseLoginView
+from django.contrib.auth.views import LogoutView as BaseLogoutView
+from django.urls import reverse_lazy
 
 # Create your views here.
 def employee_list(request):
@@ -42,7 +44,8 @@ def detail(request, pk):
         'employee_data': employee_data,
         'pre_careers': pre_careers,
         'skills': skills,
-        'assigns': assigns
+        'assigns': assigns,
+        'employee_id':employee.pk
     }
 
     return render(request, 'detail.html', context)
@@ -81,3 +84,6 @@ def signup(request):
 class LoginView(BaseLoginView):
     form_class = LoginFrom
     template_name = 'hr_user/login.html'
+
+class LogoutView(BaseLogoutView):
+    success_url = reverse_lazy('/login')

@@ -18,8 +18,9 @@ from django.urls import path, include
 from hr_tool import views
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
+    path('admin/', admin.site.urls, name='admin'),
     path('hr_tool/', include('hr_tool.urls')),
-    path('signup/', views.signupuser),
-    path('login/', views.LoginView.as_view())
+    path('signup/', views.signupuser, name='signup'),
+    path('login/', views.LoginView.as_view(), name='login'),
+    path('logout/', views.LogoutView.as_view(), name='logout')
 ]
