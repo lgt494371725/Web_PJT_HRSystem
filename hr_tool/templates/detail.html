@@ -5,9 +5,10 @@
 
 
 <p></p>
-<a href="{% url 'hr_tool:pre_career' pk %}">経験をUpdateするにはここをクリック。</a>
+<a href="{% url 'hr_tool:edit_precareer' pk %}">経験編集画面</a>
 <p></p>
-<a href="{% url 'hr_tool:assign_exp' pk %}">アサイン経験をUpdateするにはここをクリック。</a>
+<a href="{% url 'hr_tool:edit_assignexp' pk %}">アサイン経験編集画面</a>
+
 <p>
 {% for precareer in precareers %}
     <p>{{ precareer }}</p>

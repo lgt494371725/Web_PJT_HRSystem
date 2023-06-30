@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<a href="{% url 'hr_tool:add_assignexp' pk %}">Add</a>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Experience</th>
+            <th>Role</th>
+            <th>開始日</th>
+            <th>終了日</th>
+            <th>#</th>
+            <th>#</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for assignexp in assignexps %}
+        <tr>
+            <td>{{ assignexp.project | slice:"0:10" }}...</td>
+            <td>{{ assignexp.role }}</td>
+            <td>{{ assignexp.start_date }}</td>
+            <td>{{ assignexp.end_date }}</td>
+            <td><a href="{% url 'hr_tool:update_assignexp' assignexp.id %}">更新</a></td>
+            <td><a href="{% url 'hr_tool:delete_assignexp' assignexp.id %}">削除</a></td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+{% endblock %}

@@ -5,7 +5,6 @@ from .forms import AssignExpCreateForm
 
 from .models import User, TPreCareer, TAssignExp, TProject
 
-# Create your views here.
 def employee_list(request):
     return render(request, 'list.html')
 
@@ -22,6 +21,16 @@ def detail(request, pk):
     return render(request, 'detail.html', context)
 
 
+def edit_precareer(request, pk):
+    precareers = TPreCareer.objects.filter(eid=pk)
+
+    context = {
+        'pk': pk,
+        'precareers': precareers
+    }
+    return render(request, 'precareer_edit.html', context)
+
+
 def add_precareer(request, pk):
     form = PreCareerCreateForm(request.POST or None)
     print(form.data)
@@ -35,68 +44,49 @@ def add_precareer(request, pk):
         return redirect('hr_tool:detail', pk=pk)
 
     context = {
-        'pk': pk,
-        'form': form
-    }
-
-    return render(request, 'add_precareer_form.html', context)
-
-
-def precareer(request, pk):
-    form = PreCareerCreateForm(request.POST or None)
-    print(form.data)
-    print(dir(form))
-
-    if request.method == 'POST' and form.is_valid():
-        employee = get_object_or_404(User, id=pk)
-        precareer = form.save(commit=False)
-        precareer.eid = employee
-        precareer.save()
-        return redirect('hr_tool:detail', pk=pk)
-
-    context = {
-        'pk': pk,
-        'precareer_list': TPreCareer.objects.all(),
-        'form': form
+        'form': form,
+        'eid': pk
     }
 
     return render(request, 'precareer_form.html', context)
 
 
 def update_precareer(request, pk):
-    # フォームに、取得したDayを紐付ける
-    form = PreCareerCreateForm(request.POST or None)
-    print(form.data)
-    print(dir(form))
+    precareer = get_object_or_404(TPreCareer, pk=pk)
+    form = PreCareerCreateForm(request.POST or None, instance=precareer)
 
-    # method=POST、つまり送信ボタン押下時、入力内容が問題なければ
     if request.method == 'POST' and form.is_valid():
         form.save()
-        return redirect('hr_tool:detail', pk=pk)
-    
-    # 通常時のページアクセスや、入力内容に誤りがあればまたページを表示
+        return redirect('hr_tool:edit_precareer', pk=precareer.eid.id)
+
     context = {
-        'pk': pk,
-        'form': form
+        'form': form,
+        'eid': precareer.eid.id
     }
-    return render(request, 'update_precareer_form.html', context) 
+    return render(request, 'precareer_form.html', context)
 
 
 def delete_precareer(request, pk):
-    # urlのpkを基に、Dayを取得
+    precareer = get_object_or_404(TPreCareer, pk=pk)
 
-    # method=POST、つまり送信ボタン押下時、入力内容が問題なければ
     if request.method == 'POST':
-        PreCareerCreateForm.delete()
-        return redirect('hr_tool:detail', pk=pk)
-    
-    # 通常時のページアクセスや、入力内容に誤りがあればまたページを表示
+        precareer.delete()
+        return redirect('hr_tool:edit_precareer', pk=precareer.eid.id)
+
     context = {
-        'pk': pk
+        'precareer': precareer,
     }
-    return render(request, 'delete_precareer_form.html', context)
+    return render(request, 'precareer_confirm_delete.html', context)
 
 
+def edit_assignexp(request, pk):
+    assignexps = TAssignExp.objects.filter(eid=pk)
+
+    context = {
+        'pk': pk,
+        'assignexps': assignexps
+    }
+    return render(request, 'assignexp_edit.html', context)
 
 
 def add_assignexp(request, pk):
@@ -106,62 +96,42 @@ def add_assignexp(request, pk):
 
     if request.method == 'POST' and form.is_valid():
         employee = get_object_or_404(User, id=pk)
-        precareer = form.save(commit=False)
-        precareer.eid = employee
-        precareer.save()
+        assignexp = form.save(commit=False)
+        assignexp.eid = employee
+        assignexp.save()
         return redirect('hr_tool:detail', pk=pk)
 
     context = {
-        'pk': pk,
-        'form': form
+        'form': form,
+        'eid': pk
     }
 
-    return render(request, 'add_assignexp_form.html', context)
+    return render(request, 'assignexp_form.html', context)
 
 
 def update_assignexp(request, pk):
-    form = AssignExpCreateForm(request.POST or None)
-    print(form.data)
-    print(dir(form))
+    assignexp = get_object_or_404(TAssignExp, pk=pk)
+    form = AssignExpCreateForm(request.POST or None, instance=assignexp)
 
     if request.method == 'POST' and form.is_valid():
-        employee = get_object_or_404(User, id=pk)
-        precareer = form.save(commit=False)
-        precareer.eid = employee
-        precareer.save()
-        return redirect('hr_tool:detail', pk=pk)
+        form.save()
+        return redirect('hr_tool:edit_assignexp', pk=assignexp.eid.id)
 
     context = {
-        'pk': pk,
-        'form': form
-    }
-
-    return render(request, 'update_assignexp_form.html', context)
-
-
-def assignexp(request, pk):
-    context = {
-        'pk': pk,
-        'assign_list': AssignExpCreateForm.objects.all(),
+        'form': form,
+        'eid': assignexp.eid.id
     }
     return render(request, 'assignexp_form.html', context)
 
 
 def delete_assignexp(request, pk):
-    form = AssignExpCreateForm(request.POST or None)
-    print(form.data)
-    print(dir(form))
+    assignexp = get_object_or_404(TAssignExp, pk=pk)
 
-    if request.method == 'POST' and form.is_valid():
-        employee = get_object_or_404(User, id=pk)
-        precareer = form.save(commit=False)
-        precareer.eid = employee
-        precareer.save()
-        return redirect('hr_tool:detail', pk=pk)
+    if request.method == 'POST':
+        assignexp.delete()
+        return redirect('hr_tool:edit_assignexp', pk=assignexp.eid.id)
 
     context = {
-        'pk': pk,
-        'form': form
+        'assignexp': assignexp,
     }
-
-    return render(request, 'delete_assignexp_form.html', context)
+    return render(request, 'assignexp_confirm_delete.html', context)

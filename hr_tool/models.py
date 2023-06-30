@@ -81,7 +81,7 @@ class User(AbstractBaseUser):
 
 class TPreCareer(models.Model):
     id = models.AutoField('入社前経験id', primary_key=True)
-    eid = models.ForeignKey(User, verbose_name='社員番号', on_delete=models.CASCADE, to_field='id', related_name='t_pre_career_eid')
+    eid = models.ForeignKey(User, verbose_name='社員番号', on_delete=models.CASCADE, to_field='id', related_name='t_precareer_eid')
     role = models.CharField('ロール', max_length=64)
     start_date = models.DateField('開始日')
     end_date = models.DateField('終了日')

@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<form action="" method="POST">
+    <table class="table">
+        <tr>
+          <th>role</th>
+          <td>{{ precareer.role }}</td>
+        </tr>
+        <tr>
+          <th>開始日</th>
+          <td>{{ precareer.start_date }}</td>
+        </tr>
+        <tr>
+          <th>終了日</th>
+          <td>{{ precareer.end_date }}</td>
+        </tr>
+        <tr>
+          <th>Experience</th>
+          <td>{{ precareer.exp_detail }}</td>
+        </tr>
+    </table>
+    <p>こちらのデータを削除します。</p>
+    <button type="submit" class="btn btn-danger">送信</button>
+    <a class="button btn btn-secondary" href="{% url 'hr_tool:edit_precareer' precareer.eid.id %}">キャンセル</a>
+    {% csrf_token %}
+</form>
+{% endblock %}

@@ -1,28 +1,11 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<h1>個人アサイン経験編集画面</h1>
-<a href="{% url 'hr_tool:add_assign_exp' pk %}">Add</a>
-
-<table class="table">
-<thead>
-    <tr>
-    <th>Project</th>
-    <th>role</th>
-    <th>開始日</th>
-    <th>終了日</th>
-    <th>#</th>
-    <th>#</th>
-    </tr>
-</thead>
-<tbody>
-    <tr>
-    <td><a href="{% url 'hr_tool:add_assign_exp' pk %}">{{ project }}</a></td>
-    <td>{{ start_date }}</td>
-    <td>{{ end_date }}</td>
-    <td><a href="{% url 'hr_tool:update_assign_exp' pk %}">更新</a></td>
-    <td><a href="{% url 'hr_tool:delete_assign_exp' pk %}">削除</a></td>
-    </tr>
-</tbody>
-</table>
+<form action="" method="POST" enctype="multipart/form-data">
+    {{ form.as_p }}
+    <button type="submit" class="btn btn-primary">送信</button>
+    <a class="button btn btn-secondary" href="{% url 'hr_tool:edit_precareer' eid %}">キャンセル</a>
+    {% csrf_token %}
+</form>
 {% endblock %}
+
