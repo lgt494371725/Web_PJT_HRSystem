@@ -8,18 +8,21 @@ from .para import mapping_dict
 from urllib.parse import unquote
 from django.db import models
 from django.core.paginator import Paginator
+from django.shortcuts import render
+from django.shortcuts import get_object_or_404, redirect, render
+from .forms import PreCareerCreateForm
 
 def employee_list(request):
     form = SearchForm(request.GET)
-    employees = User.objects.all() 
+    employees = User.objects.all()
     print(form)
     if form.is_valid():
         query = form.cleaned_data['Search']
-        employees = User.objects.all() 
+        employees = User.objects.all()
         employees = employees.filter(models.Q(id__icontains=query))
     else:
-        employees = User.objects.all() 
-    paginator = Paginator(employees, 3) 
+        employees = User.objects.all()
+    paginator = Paginator(employees, 3)
     page_number = request.GET.get('page', 1)
     try:
         page_number = max(1, int(page_number))
@@ -61,6 +64,7 @@ def detail(request, pk):
 
 
     context = {
+        'pk': pk,
         'employee_data': employee_data,
         'pre_careers': pre_careers,
         'skills': skills,
@@ -75,7 +79,7 @@ def analysis(request):
     """
     situation:
     1. cate counts: row != None, col = val = None
-    2. cate counts: but wrong choose 
+    2. cate counts: but wrong choose
     3. cate counts: row = col != None, val = None
     4. normal: row=col=val!=None, but val wrong choice
     """
@@ -118,7 +122,7 @@ def analysis(request):
     except Exception as e:
         print(f"Wrong choices!! {type(e)}, error message:", e)
         return render(request, 'pivot_table.html', {'pivot_table': e})
-    
+
 
 def download_file_view(request):
     pivot_table_data = unquote(request.GET.get('pivot_table', ''))
@@ -136,3 +140,61 @@ def download_file_view(request):
     else:
         # 如果没有pivot table数据，则返回错误响应或重定向到其他页面
         return HttpResponse("Error: Pivot table data is missing.", content_type='text/plain')
+
+
+def edit_precareer(request, pk):
+    precareers = TPreCareer.objects.filter(eid=pk)
+
+    context = {
+        'pk': pk,
+        'precareers': precareers
+    }
+    return render(request, 'precareer_edit.html', context)
+
+
+def add_precareer(request, pk):
+    form = PreCareerCreateForm(request.POST or None)
+    print(form.data)
+    print(dir(form))
+
+    if request.method == 'POST' and form.is_valid():
+        employee = get_object_or_404(User, id=pk)
+        precareer = form.save(commit=False)
+        precareer.eid = employee
+        precareer.save()
+        return redirect('hr_tool:detail', pk=pk)
+
+    context = {
+        'form': form,
+        'eid': pk
+    }
+
+    return render(request, 'precareer_form.html', context)
+
+
+def update_precareer(request, pk):
+    precareer = get_object_or_404(TPreCareer, pk=pk)
+    form = PreCareerCreateForm(request.POST or None, instance=precareer)
+
+    if request.method == 'POST' and form.is_valid():
+        form.save()
+        return redirect('hr_tool:edit_precareer', pk=precareer.eid.id)
+
+    context = {
+        'form': form,
+        'eid': precareer.eid.id
+    }
+    return render(request, 'precareer_form.html', context)
+
+
+def delete_precareer(request, pk):
+    precareer = get_object_or_404(TPreCareer, pk=pk)
+
+    if request.method == 'POST':
+        precareer.delete()
+        return redirect('hr_tool:edit_precareer', pk=precareer.eid.id)
+
+    context = {
+        'precareer': precareer,
+    }
+    return render(request, 'precareer_confirm_delete.html', context)

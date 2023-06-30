@@ -4,7 +4,7 @@
 ここに詳細画面を表示する。
 
 <div>
-    <h3 style="display: inline; margin-right: 1rem;">個人情報</h3><a href="">編集</a>
+    <h3 style="display: inline; margin-right: 1rem;">個人情報</h3><a href="">Update</a>
     <table class="table table-striped">
         <tbody>
             {% for label, value in employee_data %}
@@ -18,7 +18,7 @@
 </div>
 
 <div>
-    <h3 style="display: inline; margin-right: 1rem;">入社前経験</h3><a href="">編集</a>
+    <h3 style="display: inline; margin-right: 1rem;">入社前経験</h3><a href="{% url 'hr_tool:edit_precareer' pk %}">Update</a>
     {% for pre_career in pre_careers %}
         <table class="table table-striped">
             <tbody>
@@ -44,7 +44,7 @@
 </div>
 
 <div>
-    <h3 style="display: inline; margin-right: 1rem;">スキル情報</h3><a href="">編集</a>
+    <h3 style="display: inline; margin-right: 1rem;">スキル情報</h3><a href="">Update</a>
     <table class="table table-striped">
         <thead>
             <tr>
@@ -64,7 +64,7 @@
 </div>
 
 <div>
-    <h3 style="display: inline; margin-right: 1rem;">アサイン経験情報</h3><a href="">編集</a>
+    <h3 style="display: inline; margin-right: 1rem;">アサイン経験情報</h3><a href="">Update</a>
     {% for assign in assigns %}
         <table class="table table-striped">
             <tbody>

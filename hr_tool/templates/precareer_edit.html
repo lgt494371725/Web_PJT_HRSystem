@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<a href="{% url 'hr_tool:add_precareer' pk %}">Add</a>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Experience</th>
+            <th>Role</th>
+            <th>開始日</th>
+            <th>終了日</th>
+            <th>#</th>
+            <th>#</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for precareer in precareers %}
+        <tr>
+            <td>{{ precareer.exp_detail | slice:"0:10" }}...</td>
+            <td>{{ precareer.role }}</td>
+            <td>{{ precareer.start_date }}</td>
+            <td>{{ precareer.end_date }}</td>
+            <td><a href="{% url 'hr_tool:update_precareer' precareer.id %}">更新</a></td>
+            <td><a href="{% url 'hr_tool:delete_precareer' precareer.id %}">削除</a></td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+{% endblock %}
+
