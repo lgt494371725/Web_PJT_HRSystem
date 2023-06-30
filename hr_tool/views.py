@@ -20,7 +20,7 @@ def detail(request, pk):
         ('氏', employee.last_name),
         ('名', employee.first_name),
         ('キャリア名', employee.career_level.name),
-        ('キャリアレベル', employee.career_level.level),
+        ('マネジメントレベル', employee.career_level.level),
         ('入社日', employee.join_of),
         ('ホームオフィス', employee.homeoffice.name),
         ('メールアドレス', f'{eid}@accenture.com'),
