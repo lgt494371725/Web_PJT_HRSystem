@@ -21,7 +21,8 @@
         </tr>
     </table>
     <p>こちらのデータを削除します。</p>
-    <button type="submit" class="btn btn-primary">送信</button>
+    <button type="submit" class="btn btn-danger">送信</button>
+    <a class="button btn btn-secondary" href="{% url 'hr_tool:edit_precareer' precareer.eid.id %}">キャンセル</a>
     {% csrf_token %}
 </form>
 {% endblock %}

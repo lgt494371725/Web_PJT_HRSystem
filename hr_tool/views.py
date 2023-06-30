@@ -43,7 +43,8 @@ def add_precareer(request, pk):
         return redirect('hr_tool:detail', pk=pk)
 
     context = {
-        'form': form
+        'form': form,
+        'eid': pk
     }
 
     return render(request, 'precareer_form.html', context)
@@ -58,7 +59,8 @@ def update_precareer(request, pk):
         return redirect('hr_tool:edit_precareer', pk=precareer.eid.id)
 
     context = {
-        'form': form
+        'form': form,
+        'eid': precareer.eid.id
     }
     return render(request, 'precareer_form.html', context)
 
