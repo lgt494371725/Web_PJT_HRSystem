@@ -2,30 +2,36 @@
 
 {% block content %}
 {% comment %} <a class="nav-link" href="{% url 'login' %}">← Log In</a> {% endcomment %}
-<div class="card mt-2 mb-5">
-  <h1 class="text-center card-header">Sign Up</h1>
-  <div class="card-body">
-    <div class="d-flex justify-content-center card-text">
-      <form method="POST card-content">
-        {% csrf_token %}
-        {% for item in form %}
-        <div class="form-group card-title font-weight-bold">
-          <label for="{{item.id_for_label}}">{{item.label}}</label>
-          <input
-              type="{{item.field.widget.input_type}}"
-              class="form-control card-text"
-              {% if item.field.required %}required{% endif %}
-              name="{{item.name}}"
-              id="{{item.id_for_label}}" />
-        </div>
-        {%  endfor %}  
-      </form>    
-    </div>
-    <div class="text-right pb-8">
-      <button class="btn btn-primary" type="submit">SignUp</button>
+<div class="container">
+  <div class="card mt-2 mb-5 w-50 mx-auto">
+    <h1 class="text-center card-header">Sign Up</h1>
+    <div class="card-body">
+      <div class="d-flex justify-content-center card-text">
+        <form method="POST" class="card-content">
+          {% csrf_token %}
+          <div class="form-group card-body font-weight-bold text-left">
+            {{form.as_p}}
+          </div>
+          {% comment %} {% for item in form %}
+          <div class="form-group card-title font-weight-bold ">
+            <label for="{{item.id_for_label}}">{{item.label}}</label>
+            <input
+                type="{{item.field.widget.input_type}}"
+                class="form-control"
+                {% if item.field.required %}required{% endif %}
+                name="{{item.name}}"
+                id="{{item.id_for_label}}" />
+          </div>
+          {%  endfor %}   {% endcomment %}
+          <div class="text-right pb-8">
+            <button class="btn btn-primary" type="submit">SignUp</button>
+          </div>
+        </form>    
+      </div>
     </div>
   </div>
 </div>
+
 
 <script>
     window.onload = () => {
