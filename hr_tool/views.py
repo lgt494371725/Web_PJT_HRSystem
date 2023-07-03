@@ -64,7 +64,7 @@ def detail(request, pk):
         ('マネジメントレベル', employee.career_level.level),
         ('入社日', employee.join_of),
         ('ホームオフィス', employee.homeoffice.name),
-        ('メールアドレス', f'{eid}@accenture.com'),
+        ('メールアドレス', f'{eid.lower()}@accenture.com'),
         ('DTE', employee.dte.name)
     ]
 
