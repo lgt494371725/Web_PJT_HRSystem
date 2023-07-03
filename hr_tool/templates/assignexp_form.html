@@ -5,7 +5,7 @@
 <form action="" method="POST" enctype="multipart/form-data">
     {{ form.as_p }}
     <button type="submit" class="btn btn-primary">送信</button>
-    <a class="button btn btn-secondary" href="{% url 'hr_tool:edit_precareer' eid %}">キャンセル</a>
+    <a class="button btn btn-secondary" href="{% url 'hr_tool:edit_assignexp' eid %}">キャンセル</a>
     {% csrf_token %}
 </form>
 {% endif %}

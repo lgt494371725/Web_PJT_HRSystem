@@ -371,8 +371,12 @@ def dropdown_test(request):
 def all_users(request):
     users = []
     for u in User.objects.all():
+        eid = f'{u.first_name}.{f"{u.middle_name}." if u.middle_name else ""}{u.last_name}'
         users.append({
             '社員番号': u.id,
+            'EID': eid,
+            'Last Name': u.last_name,
+            'First Name': u.first_name,
             'DTE': u.dte.name,
             'ML': u.career_level.level,
             'Joining Date': u.join_of,
