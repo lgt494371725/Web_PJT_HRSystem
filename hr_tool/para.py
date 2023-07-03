@@ -2,13 +2,15 @@ from .models import User, TSkill, TAssignExp, TAccount
 from django.db.models.functions import ExtractYear, ExtractMonth
 import pandas as pd
 from django.db.models import Count
+import itertools
+import copy
 
 
 def cross_query(row, col, val):
     df = get_join_data()
-    row_data = df[row] if row else None
-    col_data = df[col] if col else None
-    val_data = df[val] if val else None
+    row_data = df[row].tolist() if row else None
+    col_data = df[col].tolist() if col else None
+    val_data = df[val].tolist() if val else None
     return row_data, col_data, val_data
 
 def getYearMonth(data, key):
@@ -34,27 +36,23 @@ def get_join_data():
                 'home_office': user.homeoffice.name,
                 'DTE': user.dte.name,
             }
-        if not user_skills:
-            row['skill'] = None
-            row['assign_role'] = None
-            row['industry'] = None
+        user_skills = [skill.skill.name for skill in user_skills] if user_skills else [None]
+        user_assign_exps = [(exp.role, exp.project.account.industry.name) for exp in user_assign_exps] if user_assign_exps else [(None, None)]
+        combinations = list(itertools.product(user_skills, user_assign_exps))
+        for user_skill, user_assign_exp in combinations:
+            row = copy.deepcopy(row)
+            row['skill'] = user_skill
+            row['assign_role'] = user_assign_exp[0]
+            row['industry'] = user_assign_exp[1]
             data.append(row)
-        for skill in user_skills:
-            row['skill'] = skill.skill.name
-            if not user_assign_exps:
-                row['assign_role'] = None
-                row['industry'] = None
-                data.append(row)
-            for assign_exp in user_assign_exps:
-                row['assign_role'] = assign_exp.role
-                row['industry'] = assign_exp.project.account.industry.name
-                data.append(row)
-
     df = pd.DataFrame(data)
 
     return df
 
 # key:[model, Field]
+
+
+
 def generate_mapping_dict():
     users = User.objects.order_by('pk').all()
     mapping_dict = {'birth_year': [User, list(
@@ -72,6 +70,7 @@ def generate_mapping_dict():
                         users.annotate(join_month=ExtractYear('join_of')).values_list('join_month', flat=True))],
                     'join_year_month': [User, getYearMonth(users, 'join_of')],
                     # multi join
+
                     'num_projects': [TAssignExp, list(users.annotate(
                         num_projects=Count('t_assign_exp_eid__project', distinct=True)).values_list('num_projects',
                                                                                                     flat=True))],
