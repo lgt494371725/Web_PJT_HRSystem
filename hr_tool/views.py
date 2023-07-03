@@ -328,36 +328,45 @@ class LogoutView(BaseLogoutView):
 def to_json(queryset):
    return [model_to_dict(r) for r in queryset]
 
+
 def all_skills(request):
     ret = MSkill.objects.all()
     return JsonResponse(to_json(ret),safe=False)
+
 
 def all_skillCategories(request):
     ret = MSkillCategory.objects.all()
     return JsonResponse(to_json(ret),safe=False)
 
+
 def skills_in_categories(request,category_id):
     ret = MSkill.objects.filter(skill_category=category_id)
     return JsonResponse(to_json(ret),safe=False)
+
 
 def all_careerLevels(request):
     ret = MCareerLevel.objects.all()
     return JsonResponse(to_json(ret),safe=False)
 
+
 def all_industries(request):
     ret = MIndustry.objects.all()
     return JsonResponse(to_json(ret),safe=False)
+
 
 def all_dtes(request):
     ret = MDte.objects.all()
     return JsonResponse(to_json(ret),safe=False)
 
+
 def all_homeoffices(request):
     ret = MHomeoffice.objects.all()
     return JsonResponse(to_json(ret),safe=False)
 
+
 def dropdown_test(request):
     return render(request, 'dropdown_test.html')
+
 
 def all_users(request):
     users = []
@@ -370,6 +379,7 @@ def all_users(request):
             'Home Office': u.homeoffice.name
         })
     return JsonResponse(users, safe=False)
+
 
 def add_skill(request, pk):
     form = SkillCreateForm(request.POST or None)
@@ -388,6 +398,7 @@ def add_skill(request, pk):
     }
 
     return render(request, 'skill_form.html', context)
+
 
 def update_skill(request, pk):
     form = SkillCreateForm(request.POST or None)
@@ -429,6 +440,7 @@ def update_detail(request, pk):
     }
     return render(request, 'detail_form.html', context)
 
+
 def edit_skill(request, pk):
     skill = TSkill.objects.filter(eid=pk)
 
@@ -456,6 +468,7 @@ def add_skill(request, pk):
     }
     return render(request, 'skill_form.html', context)
 
+
 def update_skill(request, pk):
     skill = get_object_or_404(TSkill, pk=pk)
     form = SkillCreateForm(request.POST or None, instance=skill)
@@ -468,6 +481,7 @@ def update_skill(request, pk):
         'form': form,
     }
     return render(request, 'skill_form.html', context)
+
 
 def delete_skill(request, pk):
     skill = get_object_or_404(TSkill, pk=pk)
