@@ -8,6 +8,9 @@ import copy
 
 def cross_query(row, col, val):
     df = get_join_data()
+    col_list = ['id', row, col, val]
+    col_list = [i for i in col_list if i]
+    df = df[col_list].drop_duplicates()
     row_data = df[row].tolist() if row else None
     col_data = df[col].tolist() if col else None
     val_data = df[val].tolist() if val else None
