@@ -3,6 +3,7 @@ from urllib.parse import unquote
 import pandas as pd
 from django.contrib.auth import login
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.models import User
 from django.contrib.auth.views import LoginView as BaseLoginView
 from django.contrib.auth.views import LogoutView as BaseLogoutView
 from django.core.paginator import Paginator
@@ -12,9 +13,9 @@ from django.http import HttpResponse, JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse_lazy
 
-from .forms import (AssignExpCreateForm, LoginFrom, PivotTableForm,
-                    PreCareerCreateForm, SearchForm, SignUpForm,
-                    SkillCreateForm, DetailUpdateForm)
+from .forms import (AssignExpCreateForm, DetailUpdateForm, LoginFrom,
+                    PivotTableForm, PreCareerCreateForm, SearchForm,
+                    SignUpForm, SkillCreateForm, UserCreateForm)
 from .models import *
 from .para import cross_query, generate_mapping_dict
 
@@ -63,7 +64,7 @@ def detail(request, pk):
         ('マネジメントレベル', employee.career_level.level),
         ('入社日', employee.join_of),
         ('ホームオフィス', employee.homeoffice.name),
-        ('メールアドレス', f'{eid}@accenture.com'),
+        ('メールアドレス', f'{eid.lower()}@accenture.com'),
         ('DTE', employee.dte.name)
     ]
 
@@ -171,14 +172,7 @@ def edit_precareer(request, pk):
     return render(request, 'precareer_edit.html', context)
 
 
-def edit_skill(request, pk):
-    skill = TSkill.objects.filter(eid=pk)
 
-    context = {
-        'pk': pk,
-        'skill': skill
-    }
-    return render(request, 'skill_edit.html', context)
 
 
 def add_precareer(request, pk):
@@ -433,5 +427,56 @@ def update_detail(request, pk):
     context = {
         'form': form
     }
-
     return render(request, 'detail_form.html', context)
+
+def edit_skill(request, pk):
+    skill = TSkill.objects.filter(eid=pk)
+
+    context = {
+        'pk': pk,
+        'skill': skill
+    }
+    return render(request, 'skill_edit.html', context)
+
+
+def add_skill(request, pk):
+    form = SkillCreateForm(request.POST or None)
+    print(form.data)
+    print(dir(form))
+
+    if request.method == 'POST' and form.is_valid():
+        employee = get_object_or_404(User, id=pk)
+        skill = form.save(commit=False)
+        skill.eid = employee
+        skill.save()
+        return redirect('hr_tool:edit_skill', pk=pk)
+
+    context = {
+        'form': form
+    }
+    return render(request, 'skill_form.html', context)
+
+def update_skill(request, pk):
+    skill = get_object_or_404(TSkill, pk=pk)
+    form = SkillCreateForm(request.POST or None, instance=skill)
+
+    if request.method == 'POST' and form.is_valid():
+        form.save()
+        return redirect('hr_tool:edit_skill', pk=skill.eid.id)
+
+    context = {
+        'form': form,
+    }
+    return render(request, 'skill_form.html', context)
+
+def delete_skill(request, pk):
+    skill = get_object_or_404(TSkill, pk=pk)
+
+    if request.method == 'POST':
+        skill.delete()
+        return redirect('hr_tool:edit_skill', pk=skill.eid.id)
+
+    context = {
+        'skill': skill,
+    }
+    return render(request, 'skill_confirm_delete.html', context)
