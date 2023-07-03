@@ -3,6 +3,7 @@ from urllib.parse import unquote
 import pandas as pd
 from django.contrib.auth import login
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.models import User
 from django.contrib.auth.views import LoginView as BaseLoginView
 from django.contrib.auth.views import LogoutView as BaseLogoutView
 from django.core.paginator import Paginator
