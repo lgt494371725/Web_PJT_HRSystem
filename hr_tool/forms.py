@@ -115,3 +115,10 @@ class DetailUpdateForm(forms.ModelForm):
         self.fields['dte'].queryset = MDte.objects.all()
         self.fields['homeoffice'].queryset = MHomeoffice.objects.all()
         self.fields['career_level'].queryset = MCareerLevel.objects.all()
+
+
+class UserCreateForm(forms.ModelForm):
+
+    class Meta:
+        model = User
+        fields = ('career_level', 'homeoffice','dte')
