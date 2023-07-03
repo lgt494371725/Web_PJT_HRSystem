@@ -4,6 +4,11 @@
 {% comment %} <a class="nav-link" href="{% url 'login' %}">← Log In</a> {% endcomment %}
   <div class="card mt-2 mb-5 w-75 mx-auto">
     <h1 class="text-center card-header">Sign Up</h1>
+    {% if error %}
+      <div class="alert alert-danger" role="alert">
+        {{ error }}
+      </div>
+    {% endif %}
     <div class="card-body">
       <div class="d-flex justify-content-center card-text">
         <form method="POST" class="card-content">
@@ -14,10 +19,13 @@
           <div class="text-right pb-8">
             <button class="btn btn-primary" type="submit">SignUp</button>
           </div>
-        </form>    
+        </form>
       </div>
     </div>
   </div>
+
+
+
 
 <script>
     window.onload = () => {

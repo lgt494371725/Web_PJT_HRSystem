@@ -283,33 +283,33 @@ def signupuser(request):
     if request.method == 'GET':
         return render(request, 'hr_user/signupuser.html', {'form': SignUpForm()})
     else:
+        # 既に同じ社員番号を持つ User が存在しないか
+        user = User.objects.get(id=request.POST['id'])
+        if user is not None:
+            return render(
+                request,
+                'hr_user/signupuser.html',
+                {'form': SignUpForm(), 'error': '既に同じ社員番号のユーザが存在します。'}
+            )
+
         if request.POST['password1'] == request.POST['password2']:
-            # try:
-                homeoffice = MHomeoffice.objects.get(id=request.POST['homeoffice'])
-                dte = MDte.objects.get(id=request.POST['dte'])
+            homeoffice = MHomeoffice.objects.get(id=request.POST['homeoffice'])
+            dte = MDte.objects.get(id=request.POST['dte'])
+            user = User.objects.create_user(
+                request.POST['id'],
+                first_name=request.POST['first_name'],
+                last_name=request.POST['last_name'],
+                middle_name=request.POST['middle_name'],
+                password=request.POST['password1'],
+                birthday=request.POST['birthday'],
+                is_hr=('is_hr' in request.POST),
+                dte=dte,
+                homeoffice=homeoffice
+            )
+            user.save()
+            login(request, user)
+            return redirect('hr_tool:detail', pk=request.POST['id'])
 
-                print(request.POST)
-
-
-
-                user = User.objects.create_user(
-                    request.POST['id'],
-                    first_name=request.POST['first_name'],
-                    last_name=request.POST['last_name'],
-                    middle_name=request.POST['middle_name'],
-                    password=request.POST['password1'],
-                    birthday=request.POST['birthday'],
-                    is_hr=('is_hr' in request.POST),
-                    dte=dte,
-                    homeoffice=homeoffice
-                )
-                user.save()
-                login(request, user)
-                return redirect('hr_tool:detail', pk=request.POST['id'])
-            # except IntegrityError:
-            #     return render(request, 'hr_user/signupuser.html',
-            #                 {'form': SignUpForm(), 'error': 'Password didnt match.'}
-            #                 )
 
 def signup(request):
     return render(request, 'hr_tool/signupuser.html')
