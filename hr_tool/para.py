@@ -11,9 +11,9 @@ def cross_query(row, col, val):
     val_data = df[val] if val else None
     return row_data, col_data, val_data
 
-def getYearMonth(model, key):
-    year = list(model.objects.annotate(year_=ExtractYear(key)).values_list('year_', flat=True))
-    month = list(model.objects.annotate(month_=ExtractMonth(key)).values_list('month_', flat=True))
+def getYearMonth(data, key):
+    year = list(data.annotate(year_=ExtractYear(key)).values_list('year_', flat=True))
+    month = list(data.annotate(month_=ExtractMonth(key)).values_list('month_', flat=True))
     year_month = list(zip(year, month))
     return year_month
 
@@ -55,23 +55,33 @@ def get_join_data():
     return df
 
 # key:[model, Field]
-mapping_dict = {'birth_year':[User, list(User.objects.annotate(birth_year=ExtractYear('birthday')).values_list('birth_year', flat=True))], 
-                'birth_month': [User, list(User.objects.annotate(birth_month=ExtractMonth('birthday')).values_list('birth_month', flat=True))],  #
-                'birth_year_month': [User, getYearMonth(User, 'birthday')],  
-                'management_level': [User, ['ML'+ str(i) for i in list(User.objects.values_list('career_level__level', flat=True))]], 
-                'home_office': [User, list(User.objects.values_list('homeoffice__name', flat=True))],  
-                'DTE': [User, list(User.objects.values_list('dte__name', flat=True))],  
-                'join_year': [User, list(User.objects.annotate(join_year=ExtractYear('join_of')).values_list('join_year', flat=True))], 
-                'join_month': [User, list(User.objects.annotate(join_month=ExtractYear('join_of')).values_list('join_month', flat=True))],
-                'join_year_month': [User, getYearMonth(User, 'join_of')], 
-                # multi join
-                'skill': [TSkill, list(TSkill.objects.values_list('skill__name', flat=True))],  # join
-                
-                'num_projects': [TAssignExp, list(User.objects.annotate(num_projects=Count('t_assign_exp_eid__project', distinct=True)).values_list('num_projects', flat=True))],
-                # 'assign_role': [TAssignExp, TAssignExp.role],  # join
-                # 'assign_industry': [TAccount, TAccount.industry]
-                }  # join
+
 
 
 def generate_mapping_dict():
+    users = User.objects.order_by('pk').all()
+    mapping_dict = {'birth_year': [User, list(
+        users.annotate(birth_year=ExtractYear('birthday')).values_list('birth_year', flat=True))],
+                    'birth_month': [User, list(
+                        users.annotate(birth_month=ExtractMonth('birthday')).values_list('birth_month',
+                                                                                                flat=True))],  #
+                    'birth_year_month': [User, getYearMonth(users, 'birthday')],
+                    'management_level': [User, ['ML' + str(i) for i in
+                                                list(users.values_list('career_level__level', flat=True))]],
+                    'home_office': [User, list(users.values_list('homeoffice__name', flat=True))],
+                    'DTE': [User, list(users.values_list('dte__name', flat=True))],
+                    'join_year': [User, list(
+                        users.annotate(join_year=ExtractYear('join_of')).values_list('join_year', flat=True))],
+                    'join_month': [User, list(
+                        users.annotate(join_month=ExtractYear('join_of')).values_list('join_month', flat=True))],
+                    'join_year_month': [User, getYearMonth(users, 'join_of')],
+                    # multi join
+
+                    'num_projects': [TAssignExp, list(users.annotate(
+                        num_projects=Count('t_assign_exp_eid__project', distinct=True)).values_list('num_projects',
+                                                                                                    flat=True))],
+                    # 'assign_role': [TAssignExp, TAssignExp.role],  # join
+                    # 'assign_industry': [TAccount, TAccount.industry]
+                    # 'skill': [TSkill, list(TSkill.objects.values_list('skill__name', flat=True))],  # join
+                    }  # join
     return mapping_dict
