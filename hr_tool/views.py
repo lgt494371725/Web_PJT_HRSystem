@@ -2,6 +2,7 @@ from django.shortcuts import render
 from django.shortcuts import get_object_or_404, redirect, render
 from .forms import PreCareerCreateForm
 from .forms import SkillCreateForm
+from .forms import UserCreateForm
 
 from .models import User, TPreCareer
 from .models import User, TSkill
@@ -134,3 +135,15 @@ def delete_skill(request, pk):
     }
     return render(request, 'skill_confirm_delete.html', context)   
 
+def update_employee(request, pk):
+    user = get_object_or_404(User, pk=pk)
+    form = UserCreateForm(request.POST or None, instance=user)
+
+    if request.method == 'POST' and form.is_valid():
+        form.save()
+        return redirect('hr_tool:detail', pk=user.career_level.id)
+    
+    context = {
+        'form': form,
+    }
+    return render(request, 'detail.html', context)
