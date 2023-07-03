@@ -294,13 +294,8 @@ def signupuser(request):
             # try:
                 homeoffice = MHomeoffice.objects.get(id=request.POST['homeoffice'])
                 dte = MDte.objects.get(id=request.POST['dte'])
-
-                print(request.POST)
-
-
-
                 user = User.objects.create_user(
-                    request.POST['id'],
+                    request.POST['id'].zfill(8),
                     first_name=request.POST['first_name'],
                     last_name=request.POST['last_name'],
                     middle_name=request.POST['middle_name'],
@@ -312,7 +307,7 @@ def signupuser(request):
                 )
                 user.save()
                 login(request, user)
-                return redirect('hr_tool:detail', pk=request.POST['id'])
+                return redirect('hr_tool:detail', pk=request.POST['id'].zfill(8))
             # except IntegrityError:
             #     return render(request, 'hr_user/signupuser.html',
             #                 {'form': SignUpForm(), 'error': 'Password didnt match.'}
