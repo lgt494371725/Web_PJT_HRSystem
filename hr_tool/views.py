@@ -13,9 +13,9 @@ from django.http import HttpResponse, JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse_lazy
 
-from .forms import (AssignExpCreateForm, LoginFrom, PivotTableForm,
-                    PreCareerCreateForm, SearchForm, SignUpForm,
-                    SkillCreateForm, DetailUpdateForm)
+from .forms import (AssignExpCreateForm, DetailUpdateForm, LoginFrom,
+                    PivotTableForm, PreCareerCreateForm, SearchForm,
+                    SignUpForm, SkillCreateForm, UserCreateForm)
 from .models import *
 from .para import cross_query, generate_mapping_dict
 
@@ -49,7 +49,7 @@ def employee_list(request):
 @login_required
 def detail(request, pk):
     employee = get_object_or_404(User, id=pk)
-    print("get:", employee)
+    # print("get:", employee)
     eid = employee.first_name
     if employee.middle_name:
         eid += f'.{employee.middle_name}'
@@ -64,7 +64,7 @@ def detail(request, pk):
         ('マネジメントレベル', employee.career_level.level),
         ('入社日', employee.join_of),
         ('ホームオフィス', employee.homeoffice.name),
-        ('メールアドレス', f'{eid}@accenture.com'),
+        ('メールアドレス', f'{eid.lower()}@accenture.com'),
         ('DTE', employee.dte.name)
     ]
 
@@ -117,9 +117,9 @@ def analysis(request):
                 if agg_func == "count":
                     val = "number"
                     val_data = [1]*len(row_data)
-                print("row_data", row_data)
-                print("col_data", col_data)
-                print("val_data", val_data)
+                # print("row_data", row_data)
+                # print("col_data", col_data)
+                # print("val_data", val_data)
                 df = pd.DataFrame({row: row_data,
                                 col: col_data,
                                 val: val_data})
@@ -172,14 +172,7 @@ def edit_precareer(request, pk):
     return render(request, 'precareer_edit.html', context)
 
 
-def edit_skill(request, pk):
-    skill = TSkill.objects.filter(eid=pk)
 
-    context = {
-        'pk': pk,
-        'skill': skill
-    }
-    return render(request, 'skill_edit.html', context)
 
 
 def add_precareer(request, pk):
@@ -290,28 +283,32 @@ def signupuser(request):
     if request.method == 'GET':
         return render(request, 'hr_user/signupuser.html', {'form': SignUpForm()})
     else:
+        # 既に同じ社員番号を持つ User が存在しないか
+        if User.objects.filter(id=request.POST['id']).exists():
+            return render(
+                request,
+                'hr_user/signupuser.html',
+                {'form': SignUpForm(), 'error': '既に同じ社員番号のユーザが存在します。'}
+            )
+
         if request.POST['password1'] == request.POST['password2']:
-            # try:
-                homeoffice = MHomeoffice.objects.get(id=request.POST['homeoffice'])
-                dte = MDte.objects.get(id=request.POST['dte'])
-                user = User.objects.create_user(
-                    request.POST['id'].zfill(8),
-                    first_name=request.POST['first_name'],
-                    last_name=request.POST['last_name'],
-                    middle_name=request.POST['middle_name'],
-                    password=request.POST['password1'],
-                    birthday=request.POST['birthday'],
-                    is_hr=('is_hr' in request.POST),
-                    dte=dte,
-                    homeoffice=homeoffice
-                )
-                user.save()
-                login(request, user)
-                return redirect('hr_tool:detail', pk=request.POST['id'].zfill(8))
-            # except IntegrityError:
-            #     return render(request, 'hr_user/signupuser.html',
-            #                 {'form': SignUpForm(), 'error': 'Password didnt match.'}
-            #                 )
+            homeoffice = MHomeoffice.objects.get(id=request.POST['homeoffice'])
+            dte = MDte.objects.get(id=request.POST['dte'])
+            user = User.objects.create_user(
+                request.POST['id'],
+                first_name=request.POST['first_name'],
+                last_name=request.POST['last_name'],
+                middle_name=request.POST['middle_name'],
+                password=request.POST['password1'],
+                birthday=request.POST['birthday'],
+                is_hr=('is_hr' in request.POST),
+                dte=dte,
+                homeoffice=homeoffice
+            )
+            user.save()
+            login(request, user)
+            return redirect('hr_tool:detail', pk=request.POST['id'])
+
 
 def signup(request):
     return render(request, 'hr_tool/signupuser.html')
@@ -330,36 +327,45 @@ class LogoutView(BaseLogoutView):
 def to_json(queryset):
    return [model_to_dict(r) for r in queryset]
 
+
 def all_skills(request):
     ret = MSkill.objects.all()
     return JsonResponse(to_json(ret),safe=False)
+
 
 def all_skillCategories(request):
     ret = MSkillCategory.objects.all()
     return JsonResponse(to_json(ret),safe=False)
 
+
 def skills_in_categories(request,category_id):
     ret = MSkill.objects.filter(skill_category=category_id)
     return JsonResponse(to_json(ret),safe=False)
+
 
 def all_careerLevels(request):
     ret = MCareerLevel.objects.all()
     return JsonResponse(to_json(ret),safe=False)
 
+
 def all_industries(request):
     ret = MIndustry.objects.all()
     return JsonResponse(to_json(ret),safe=False)
+
 
 def all_dtes(request):
     ret = MDte.objects.all()
     return JsonResponse(to_json(ret),safe=False)
 
+
 def all_homeoffices(request):
     ret = MHomeoffice.objects.all()
     return JsonResponse(to_json(ret),safe=False)
 
+
 def dropdown_test(request):
     return render(request, 'dropdown_test.html')
+
 
 def all_users(request):
     users = []
@@ -372,6 +378,7 @@ def all_users(request):
             'Home Office': u.homeoffice.name
         })
     return JsonResponse(users, safe=False)
+
 
 def add_skill(request, pk):
     form = SkillCreateForm(request.POST or None)
@@ -390,6 +397,7 @@ def add_skill(request, pk):
     }
 
     return render(request, 'skill_form.html', context)
+
 
 def update_skill(request, pk):
     form = SkillCreateForm(request.POST or None)
@@ -429,5 +437,59 @@ def update_detail(request, pk):
     context = {
         'form': form
     }
-
     return render(request, 'detail_form.html', context)
+
+
+def edit_skill(request, pk):
+    skill = TSkill.objects.filter(eid=pk)
+
+    context = {
+        'pk': pk,
+        'skill': skill
+    }
+    return render(request, 'skill_edit.html', context)
+
+
+def add_skill(request, pk):
+    form = SkillCreateForm(request.POST or None)
+    print(form.data)
+    print(dir(form))
+
+    if request.method == 'POST' and form.is_valid():
+        employee = get_object_or_404(User, id=pk)
+        skill = form.save(commit=False)
+        skill.eid = employee
+        skill.save()
+        return redirect('hr_tool:edit_skill', pk=pk)
+
+    context = {
+        'form': form
+    }
+    return render(request, 'skill_form.html', context)
+
+
+def update_skill(request, pk):
+    skill = get_object_or_404(TSkill, pk=pk)
+    form = SkillCreateForm(request.POST or None, instance=skill)
+
+    if request.method == 'POST' and form.is_valid():
+        form.save()
+        return redirect('hr_tool:edit_skill', pk=skill.eid.id)
+
+    context = {
+        'form': form,
+    }
+    return render(request, 'skill_form.html', context)
+
+
+def delete_skill(request, pk):
+    skill = get_object_or_404(TSkill, pk=pk)
+
+    if request.method == 'POST':
+        skill.delete()
+        return redirect('hr_tool:edit_skill', pk=skill.eid.id)
+
+    context = {
+        'skill': skill,
+    }
+    return render(request, 'skill_confirm_delete.html', context)

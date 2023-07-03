@@ -1,10 +1,16 @@
 {% extends "base.html" %} {% block content %}
 <div class="card mt-2 mx-auto">
   <h1 class="text-center card-header">Login</h1>
+  {% if form.errors %}
+    <div class="alert alert-danger" role="alert">
+      社員番号とパスワードが一致しません。正しく入力してください。
+    </div>
+  {% endif %}
   <div class="card-body">
     <div class="d-flex justify-content-center card-text">
+
       <form method="POST" class="form-content">
-        {% csrf_token %} 
+        {% csrf_token %}
         {% for item in form %}
         <div class="form-group card-title font-weight-bold">
           <label for="{{item.id_for_label}}">{{item.label}}</label>
@@ -15,7 +21,7 @@
           name="{{item.name}}"
           id="{{item.id_for_label}}" />
         </div>
-        {%  endfor %}
+        {% endfor %}
         <div class="text-center">
           <button type="submit" class="btn btn-primary mt-3">Login</button>
         </div>

@@ -14,6 +14,8 @@
         <th>社員名</th>
         <th>スキル名</th>
         <th>更新日</th>
+        <th>#</th>
+        <th>#</th>
     </tr>
     </thead>
     <tbody>
@@ -22,7 +24,9 @@
         <td>{{skill.eid}}</td>
         <td>{{skill.skill}}</td>
         <td>{{skill.updated_date}}</td>
-        <td><a href="{% url 'hr_tool:update_skill' pk %}">更新</a></td>
+        <td><a href="{% url 'hr_tool:update_skill' skill.id %}">更新</a></td>
+        <td><a href="{% url 'hr_tool:delete_skill' skill.id %}">削除</a></td>
+        
 
     </tr>
     {% endfor %}

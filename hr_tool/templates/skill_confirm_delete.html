@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<form action="" method="POST">
+    <table class="table">
+
+    <thead> 
+    <tr>
+        <th>社員名</th>
+        <th>スキル名</th>
+        <th>更新日</th>
+    </tr>
+    </thead>
+    <tbody>
+        <tr>
+
+            <td>{{skill.eid}}</td>
+            <td>{{skill.skill}}</td>
+            <td>{{skill.updated_date}}</td>
+        </tr>
+    </tbody>
+        
+    </table>    
+        <p>こちらのデータを削除します。</p>
+        <button type="submit" class="btn btn-danger">送信</button>
+        <a class="button btn btn-secondary" href="{% url 'hr_tool:edit_skill' skill.eid.id %}">キャンセル</a>
+        {% csrf_token %}
+    </form>
+{% endblock %}

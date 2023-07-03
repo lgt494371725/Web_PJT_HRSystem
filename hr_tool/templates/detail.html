@@ -2,42 +2,42 @@
 
 {% block content %}
 <div>
-  <div class="card mt-2">
-    <div class="card-body">
-      <h1 class="card-title font-weight-bold text-center">個人情報</h1>
-      {% if employee_id == user.id %}
-      <span>
-        <div class="text-right mb-1 mr-2">
-          <a href="{% url 'hr_tool:update_detail' pk %}" class="card-link">Update</a>
+    <div class="card mt-2">
+        <div class="card-body">
+            <h1 class="card-title font-weight-bold text-center">個人情報</h1>
+            {% if employee_id == user.id %}
+            <span>
+                <div class="text-right mb-1 mr-2">
+                    <a href="{% url 'hr_tool:update_detail' pk %}" class="card-link">Update</a>
+                </div>
+            </span>
+            {% endif %}
+            <table class="table table-striped">
+                <tbody>
+                    {% for label, value in employee_data %}
+                    <tr>
+                        <th scope="row">{{ label }}</th>
+                        <td>{{ value }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
         </div>
-      </span> 
-      {% endif %}
-      <table class="table table-striped">
-          <tbody>
-              {% for label, value in employee_data %}
-                  <tr>
-                      <th scope="row">{{ label }}</th>
-                      <td>{{ value }}</td>
-                  </tr>
-              {% endfor %}
-          </tbody>
-      </table>
-    </div>
 
-    <div class="card-body">
-      <div class="text-center">
-        <h3 class="card-subtitle font-weight-bold ml-2">入社前経験</h3>
-      </div>
-        {% if employee_id == user.id %}
-        <div class="text-right mb-1 mr-2">
-          <a href="{% url 'hr_tool:edit_precareer' pk %}" class="card-link">Update</a>
-        </div>
-        {% endif %}
-        {% for pre_career in pre_careers %}
+        <div class="card-body">
+            <div class="text-center">
+                <h3 class="card-subtitle font-weight-bold ml-2">入社前経験</h3>
+            </div>
+            {% if employee_id == user.id %}
+            <div class="text-right mb-1 mr-2">
+                <a href="{% url 'hr_tool:edit_precareer' pk %}" class="card-link">Update</a>
+            </div>
+            {% endif %}
+            {% for pre_career in pre_careers %}
             <table class="table table-striped">
                 <tbody>
                     <tr>
-                        <th scope="row">ロール</th>
+                        <th scope="row" style="width: 20%;">ロール</th>
                         <td>{{ pre_career.role }}</td>
                     </tr>
                     <tr>
