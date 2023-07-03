@@ -1,10 +1,11 @@
 {% extends 'base.html' %}
 
 {% block content %}
+{% if user.id == eid %}
 <form action="" method="POST">
     <table class="table">
 
-    <thead> 
+    <thead>
     <tr>
         <th>社員名</th>
         <th>スキル名</th>
@@ -19,11 +20,12 @@
             <td>{{skill.updated_date}}</td>
         </tr>
     </tbody>
-        
-    </table>    
+
+    </table>
         <p>こちらのデータを削除します。</p>
         <button type="submit" class="btn btn-danger">送信</button>
         <a class="button btn btn-secondary" href="{% url 'hr_tool:edit_skill' skill.eid.id %}">キャンセル</a>
         {% csrf_token %}
     </form>
+{% endif %}
 {% endblock %}

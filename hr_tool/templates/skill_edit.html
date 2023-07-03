@@ -1,6 +1,7 @@
 {% extends 'base.html' %}
 
 {% block content %}
+{% if user.id == eid %}
 <h2>スキル編集画面</h2>
 <a href="{% url 'hr_tool:add_skill' pk %}">追加</a>
 
@@ -8,8 +9,8 @@
 <table class="table table-bordered">
 
 
-    
-    <thead> 
+
+    <thead>
     <tr>
         <th>社員名</th>
         <th>スキル名</th>
@@ -26,21 +27,14 @@
         <td>{{skill.updated_date}}</td>
         <td><a href="{% url 'hr_tool:update_skill' skill.id %}">更新</a></td>
         <td><a href="{% url 'hr_tool:delete_skill' skill.id %}">削除</a></td>
-        
+
 
     </tr>
     {% endfor %}
     </tbody>
 </table>
-
-        
-    
-
-    
-
-
+{% endif %}
 {% endblock %}
 
 
 
-    

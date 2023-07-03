@@ -1,7 +1,8 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<a class="button btn btn-success" 
+{% if user.id == eid %}
+<a class="button btn btn-success"
 href="{% url 'hr_tool:add_assignexp' pk %}">Add</a>
 
 <table class="table">
@@ -28,5 +29,5 @@ href="{% url 'hr_tool:add_assignexp' pk %}">Add</a>
         {% endfor %}
     </tbody>
 </table>
-
+{% endif %}
 {% endblock %}

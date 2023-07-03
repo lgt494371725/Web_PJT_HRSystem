@@ -167,12 +167,10 @@ def edit_precareer(request, pk):
 
     context = {
         'pk': pk,
-        'precareers': precareers
+        'precareers': precareers,
+        'eid': pk
     }
     return render(request, 'precareer_edit.html', context)
-
-
-
 
 
 def add_precareer(request, pk):
@@ -219,6 +217,7 @@ def delete_precareer(request, pk):
 
     context = {
         'precareer': precareer,
+        'eid': precareer.eid.id
     }
     return render(request, 'precareer_confirm_delete.html', context)
 
@@ -228,7 +227,8 @@ def edit_assignexp(request, pk):
 
     context = {
         'pk': pk,
-        'assignexps': assignexps
+        'assignexps': assignexps,
+        'eid': pk
     }
     return render(request, 'assignexp_edit.html', context)
 
@@ -274,7 +274,8 @@ def delete_assignexp(request, pk):
         return redirect('hr_tool:edit_assignexp', pk=assignexp.eid.id)
 
     context = {
-        'assignexp': assignexp
+        'assignexp': assignexp,
+        'eid': assignexp.eid.id
     }
     return render(request, 'assignexp_confirm_delete.html', context)
 
@@ -393,7 +394,8 @@ def add_skill(request, pk):
         return redirect('hr_tool:edit_skill', pk=pk)
 
     context = {
-        'form': form
+        'form': form,
+        'eid': pk
     }
 
     return render(request, 'skill_form.html', context)
@@ -411,7 +413,8 @@ def update_skill(request, pk):
         return redirect('hr_tool:detail', pk=pk)
 
     context = {
-        'form': form
+        'form': form,
+        'eid': pk
     }
 
     return render(request, 'skill_form.html', context)
@@ -435,7 +438,9 @@ def update_detail(request, pk):
         return redirect('hr_tool:detail', pk=pk)
 
     context = {
-        'form': form
+        'form': form,
+        'pk': pk,
+        'eid': pk
     }
     return render(request, 'detail_form.html', context)
 
@@ -445,7 +450,8 @@ def edit_skill(request, pk):
 
     context = {
         'pk': pk,
-        'skill': skill
+        'skill': skill,
+        'eid': pk
     }
     return render(request, 'skill_edit.html', context)
 
@@ -463,7 +469,8 @@ def add_skill(request, pk):
         return redirect('hr_tool:edit_skill', pk=pk)
 
     context = {
-        'form': form
+        'form': form,
+        'eid': pk
     }
     return render(request, 'skill_form.html', context)
 
@@ -478,6 +485,7 @@ def update_skill(request, pk):
 
     context = {
         'form': form,
+        'eid': skill.eid.id
     }
     return render(request, 'skill_form.html', context)
 
@@ -491,5 +499,6 @@ def delete_skill(request, pk):
 
     context = {
         'skill': skill,
+        'eid': skill.eid.id
     }
     return render(request, 'skill_confirm_delete.html', context)
