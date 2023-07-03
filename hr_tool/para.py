@@ -30,7 +30,7 @@ def get_join_data():
         user_assign_exps = user.t_assign_exp_eid.all()
         row = {
                 'id': user.id,
-                'management_level': 'ML'+str(user.career_level.level),
+                'management_level': user.career_level.level,
                 'home_office': user.homeoffice.name,
                 'DTE': user.dte.name,
             }
@@ -47,7 +47,7 @@ def get_join_data():
                 data.append(row)
             for assign_exp in user_assign_exps:
                 row['assign_role'] = assign_exp.role
-                row['industry'] = assign_exp.project.account.industry
+                row['industry'] = assign_exp.project.account.industry.name
                 data.append(row)
 
     df = pd.DataFrame(data)
