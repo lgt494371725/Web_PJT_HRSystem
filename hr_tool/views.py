@@ -284,8 +284,7 @@ def signupuser(request):
         return render(request, 'hr_user/signupuser.html', {'form': SignUpForm()})
     else:
         # 既に同じ社員番号を持つ User が存在しないか
-        user = User.objects.get(id=request.POST['id'])
-        if user is not None:
+        if User.objects.filter(id=request.POST['id']).exists():
             return render(
                 request,
                 'hr_user/signupuser.html',
