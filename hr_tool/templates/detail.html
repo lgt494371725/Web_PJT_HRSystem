@@ -24,91 +24,96 @@
       </table>
     </div>
 
-  <div>
-      <h4 class="card-subtitle font-weight-bold ml-2">入社前経験</h4>
+    <div class="card-body">
+      <div class="text-center">
+        <h3 class="card-subtitle font-weight-bold ml-2">入社前経験</h3>
+      </div>
+        {% if employee_id == user.id %}
+        <div class="text-right mb-1 mr-2">
+          <a href="{% url 'hr_tool:edit_precareer' pk %}" class="card-link">Update</a>
+        </div>
+        {% endif %}
+        {% for pre_career in pre_careers %}
+            <table class="table table-striped">
+                <tbody>
+                    <tr>
+                        <th scope="row">ロール</th>
+                        <td>{{ pre_career.role }}</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">開始日</th>
+                        <td>{{ pre_career.start_date }}</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">終了日</th>
+                        <td>{{ pre_career.end_date}}</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">詳細</th>
+                        <td>{{ pre_career.exp_detail }}</td>
+                    </tr>
+                </tbody>
+            </table>
+        {% endfor %}
+    </div>
+
+    <div class="card-body">
+      <div class="text-center">
+        <h3 class="card-subtitle font-weight-bold ml-2">スキル情報</h3>
+      </div>
       {% if employee_id == user.id %}
       <div class="text-right mb-1 mr-2">
-        <a href="{% url 'hr_tool:edit_precareer' pk %}" class="card-link">Update</a>
+        <a href="{% url 'hr_tool:edit_skill' pk %}"  class="card-link">Update</a>
       </div>
       {% endif %}
-      {% for pre_career in pre_careers %}
-          <table class="table table-striped">
-              <tbody>
-                  <tr>
-                      <th scope="row">ロール</th>
-                      <td>{{ pre_career.role }}</td>
-                  </tr>
-                  <tr>
-                      <th scope="row">開始日</th>
-                      <td>{{ pre_career.start_date }}</td>
-                  </tr>
-                  <tr>
-                      <th scope="row">終了日</th>
-                      <td>{{ pre_career.end_date}}</td>
-                  </tr>
-                  <tr>
-                      <th scope="row">詳細</th>
-                      <td>{{ pre_career.exp_detail }}</td>
-                  </tr>
-              </tbody>
-          </table>
-      {% endfor %}
-  </div>
-
-  <div>
-      <h3 style="display: inline; margin-right: 1rem;">スキル情報</h3>
-      {% if employee_id == user.id %}
-      <a href="{% url 'hr_tool:edit_skill' pk %}">Update</a>
-      {% endif %}
-      <table class="table table-striped">
-          <thead>
-              <tr>
-                  <th scope="col">スキル名</th>
-                  <th scope="col">更新日</th>
-              </tr>
-          </thead>
-          <tbody>
-              {% for skill in skills %}
-                  <tr>
-                      <th scope="row">{{ skill.skill.name }}</th>
+      {% for skill in skills %}
+            <table class="table table-striped">
+                <tbody>
+                    <tr>
+                      <th scope="col">スキル名</th>
+                      <td>{{ skill.skill.name }}</td>
+                    </tr>
+                    <tr>
+                      <th scope="col">更新日</th>
                       <td>{{ skill.updated_date }}</td>
-                  </tr>
-              {% endfor %}
-          </tbody>
-      </table>
-  </div>
-
-  <div>
-      <h3 style="display: inline; margin-right: 1rem;">アサイン経験情報</h3>
-      {% if employee_id == user.id %}
-      <a href="{% url 'hr_tool:edit_assignexp' pk %}">Update</a>
-      {% endif %}
-      {% for assign in assigns %}
-          <table class="table table-striped">
-              <tbody>
-                  <tr>
-                      <th scope="row">プロジェクト名</th>
-                      <td>{{ assign.project.name }}</td>
-                  </tr>
-                  <tr>
-                      <th scope="row">ロール</th>
-                      <td>{{ assign.role }}</td>
-                  </tr>
-                  <tr>
-                      <th scope="row">開始日</th>
-                      <td>{{ assign.start_date}}</td>
-                  </tr>
-                  <tr>
-                      <th scope="row">終了日</th>
-                      <td>{{ assign.end_date }}</td>
-                  </tr>
-              </tbody>
-          </table>
+                    </tr>
+                </tbody>
+            </table>
       {% endfor %}
-  </div>
+    </div>
 
-  <a href="{% url 'hr_tool:edit_skill' pk %}">スキル編集画面</a>
-
+    <div class="card-body">
+      <div class="text-center">
+        <h3 class="card-subtitle font-weight-bold ml-2" >アサイン経験情報</h3>
+      </div>
+      {% if employee_id == user.id %}
+      <div class="text-right mb-1 mr-2">
+        <a href="{% url 'hr_tool:edit_assignexp' pk %}" class="card-link">Update</a>
+      </div>  
+      {% endif %}
+        {% for assign in assigns %}
+            <table class="table table-striped">
+                <tbody>
+                    <tr>
+                        <th scope="row">プロジェクト名</th>
+                        <td>{{ assign.project.name }}</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">ロール</th>
+                        <td>{{ assign.role }}</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">開始日</th>
+                        <td>{{ assign.start_date}}</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">終了日</th>
+                        <td>{{ assign.end_date }}</td>
+                    </tr>
+                </tbody>
+            </table>
+        {% endfor %}
+    </div>
   <p>
   {% for precareer in precareers %}
       <p>{{ precareer }}</p>
