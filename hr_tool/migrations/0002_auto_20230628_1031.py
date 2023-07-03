@@ -7,6 +7,7 @@ from django.db import migrations
 def load_fixture(apps, schema_editor):
     call_command('loaddata', 'hr_tool/fixtures/initial_master.json', app_label='hr_tool')
     call_command('loaddata', 'hr_tool/fixtures/initial_transaction.json', app_label='hr_tool')
+    call_command('loaddata', 'hr_tool/fixtures/test_employees.json', app_label='hr_tool')
 
 
 class Migration(migrations.Migration):

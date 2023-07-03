@@ -150,14 +150,196 @@
         "model": "hr_tool.mdte",
         "pk": 0,
         "fields": {
-            "name": "IES"
+            "name": "TGP-ITS-IES"
         }
     },
     {
         "model": "hr_tool.mdte",
         "pk": 1,
         "fields": {
-            "name": "ITS-IES"
+            "name": "TGP-IES"
+        }
+    },
+    {
+        "model": "hr_tool.mdte",
+        "pk": 2,
+        "fields": {
+            "name": "TGP-ITS-ICE"
+        }
+    },
+    {
+        "model": "hr_tool.mdte",
+        "pk": 3,
+        "fields": {
+            "name": "TGP-ICE"
+        }
+    },
+    {
+        "model": "hr_tool.mdte",
+        "pk": 4,
+        "fields": {
+            "name": "TGP-ITS-CFA"
+        }
+    },
+    {
+        "model": "hr_tool.mdte",
+        "pk": 5,
+        "fields": {
+            "name": "TGP-E&I-CFA"
+        }
+    },
+    {
+        "model": "hr_tool.mdte",
+        "pk": 6,
+        "fields": {
+            "name": "TGP-ITS-FSS"
+        }
+    },
+    {
+        "model": "hr_tool.mdte",
+        "pk": 7,
+        "fields": {
+            "name": "TGP-AS-FS"
+        }
+    },
+    {
+        "model": "hr_tool.mdte",
+        "pk": 8,
+        "fields": {
+            "name": "TGP-ITXO"
+        }
+    },
+    {
+        "model": "hr_tool.mdte",
+        "pk": 9,
+        "fields": {
+            "name": "TGP-AS-PRD"
+        }
+    },
+    {
+        "model": "hr_tool.mdte",
+        "pk": 10,
+        "fields": {
+            "name": "TGP-MS"
+        }
+    },
+    {
+        "model": "hr_tool.mdte",
+        "pk": 11,
+        "fields": {
+            "name": "TGP-E&I-Workday"
+        }
+    },
+    {
+        "model": "hr_tool.mdte",
+        "pk": 12,
+        "fields": {
+            "name": "TGP- E&I-CrossPF"
+        }
+    },
+    {
+        "model": "hr_tool.mdte",
+        "pk": 13,
+        "fields": {
+            "name": "TGP-E&I-CrossPF"
+        }
+    },
+    {
+        "model": "hr_tool.mdte",
+        "pk": 14,
+        "fields": {
+            "name": "TGP-Security"
+        }
+    },
+    {
+        "model": "hr_tool.mdte",
+        "pk": 15,
+        "fields": {
+            "name": "TGP-ICI"
+        }
+    },
+    {
+        "model": "hr_tool.mdte",
+        "pk": 16,
+        "fields": {
+            "name": "TGP-AS-H&PS"
+        }
+    },
+    {
+        "model": "hr_tool.mdte",
+        "pk": 17,
+        "fields": {
+            "name": "TGP-ITS-RES"
+        }
+    },
+    {
+        "model": "hr_tool.mdte",
+        "pk": 18,
+        "fields": {
+            "name": "TGP-AS-RES"
+        }
+    },
+    {
+        "model": "hr_tool.mdte",
+        "pk": 19,
+        "fields": {
+            "name": "TGP-AS-CMT"
+        }
+    },
+    {
+        "model": "hr_tool.mdte",
+        "pk": 20,
+        "fields": {
+            "name": "TGP-ITS-S&P"
+        }
+    },
+    {
+        "model": "hr_tool.mdte",
+        "pk": 21,
+        "fields": {
+            "name": "TGP-QE&A"
+        }
+    },
+    {
+        "model": "hr_tool.mdte",
+        "pk": 22,
+        "fields": {
+            "name": "TGP-ITS-AIH"
+        }
+    },
+    {
+        "model": "hr_tool.mdte",
+        "pk": 23,
+        "fields": {
+            "name": "S&C-Applied Intelligence-DDC"
+        }
+    },
+    {
+        "model": "hr_tool.mdte",
+        "pk": 24,
+        "fields": {
+            "name": "S&C-Applied Intelligence-AI"
+        }
+    },
+    {
+        "model": "hr_tool.mdte",
+        "pk": 25,
+        "fields": {
+            "name": "S&C-Applied Intelligence-DS"
+        }
+    },
+    {
+        "model": "hr_tool.mdte",
+        "pk": 26,
+        "fields": {
+            "name": "TGP-ITS-TfLS"
+        }
+    },
+    {
+        "model": "hr_tool.mdte",
+        "pk": 27,
+        "fields": {
+            "name": "S&C-Technology Strategy & Advisory-TA"
         }
     },
     {
@@ -172,6 +354,34 @@
         "pk": 1,
         "fields": {
             "name": "Minatomirai"
+        }
+    },
+    {
+        "model": "hr_tool.mhomeoffice",
+        "pk": 2,
+        "fields": {
+            "name": "Kansai"
+        }
+    },
+    {
+        "model": "hr_tool.mhomeoffice",
+        "pk": 3,
+        "fields": {
+            "name": "Aizu"
+        }
+    },
+    {
+        "model": "hr_tool.mhomeoffice",
+        "pk": 4,
+        "fields": {
+            "name": "Hokkaido"
+        }
+    },
+    {
+        "model": "hr_tool.mhomeoffice",
+        "pk": 5,
+        "fields": {
+            "name": "Kumamoto"
         }
     },
     {
