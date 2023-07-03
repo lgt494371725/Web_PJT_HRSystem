@@ -75,7 +75,6 @@ def generate_mapping_dict():
                         users.annotate(join_month=ExtractYear('join_of')).values_list('join_month', flat=True))],
                     'join_year_month': [User, getYearMonth(users, 'join_of')],
                     # multi join
-
                     'num_projects': [TAssignExp, list(users.annotate(
                         num_projects=Count('t_assign_exp_eid__project', distinct=True)).values_list('num_projects',
                                                                                                     flat=True))],
