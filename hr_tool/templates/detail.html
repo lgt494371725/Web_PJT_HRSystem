@@ -54,6 +54,7 @@
                     </tr>
                 </tbody>
             </table>
+            <hr>
         {% endfor %}
     </div>
 
@@ -67,18 +68,19 @@
       </div>
       {% endif %}
       {% for skill in skills %}
-            <table class="table table-striped">
-                <tbody>
-                    <tr>
-                      <th scope="col">スキル名</th>
-                      <td>{{ skill.skill.name }}</td>
-                    </tr>
-                    <tr>
-                      <th scope="col">更新日</th>
-                      <td>{{ skill.updated_date }}</td>
-                    </tr>
-                </tbody>
-            </table>
+      <table class="table table-striped">
+          <tbody>
+              <tr>
+                <th scope="col">スキル名</th>
+                <td>{{ skill.skill.name }}</td>
+              </tr>
+              <tr>
+                <th scope="col">更新日</th>
+                <td>{{ skill.updated_date }}</td>
+              </tr>
+          </tbody>
+      </table>
+      <hr>
       {% endfor %}
     </div>
 
@@ -91,28 +93,29 @@
         <a href="{% url 'hr_tool:edit_assignexp' pk %}" class="card-link">Update</a>
       </div>  
       {% endif %}
-        {% for assign in assigns %}
-            <table class="table table-striped">
-                <tbody>
-                    <tr>
-                        <th scope="row">プロジェクト名</th>
-                        <td>{{ assign.project.name }}</td>
-                    </tr>
-                    <tr>
-                        <th scope="row">ロール</th>
-                        <td>{{ assign.role }}</td>
-                    </tr>
-                    <tr>
-                        <th scope="row">開始日</th>
-                        <td>{{ assign.start_date}}</td>
-                    </tr>
-                    <tr>
-                        <th scope="row">終了日</th>
-                        <td>{{ assign.end_date }}</td>
-                    </tr>
-                </tbody>
-            </table>
-        {% endfor %}
+      {% for assign in assigns %}
+      <table class="table table-striped">
+          <tbody>
+              <tr>
+                  <th scope="row">プロジェクト名</th>
+                  <td>{{ assign.project.name }}</td>
+              </tr>
+              <tr>
+                  <th scope="row">ロール</th>
+                  <td>{{ assign.role }}</td>
+              </tr>
+              <tr>
+                  <th scope="row">開始日</th>
+                  <td>{{ assign.start_date}}</td>
+              </tr>
+              <tr>
+                  <th scope="row">終了日</th>
+                  <td>{{ assign.end_date }}</td>
+              </tr>
+          </tbody>
+      </table>
+      <hr>
+      {% endfor %}
     </div>
   <p>
   {% for precareer in precareers %}
@@ -125,5 +128,5 @@
           <p>{{ skill }}</p>
       {% endfor %}
   </p>
-  {% endblock %}
 </div>
+{% endblock %}
