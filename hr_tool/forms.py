@@ -1,4 +1,6 @@
 from django import forms
+from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
+
 from .models import *
 
 
@@ -42,9 +44,74 @@ class PivotTableForm(forms.Form):
             self.add_error('value', 'Value cannot be selected when Aggregation Function is "count".')
 
         return cleaned_data
-    
+
 
 class SearchForm(forms.Form):
     Search  = forms.CharField(required=False)
     def __init__(self, *args, **kwargs):
         super(SearchForm, self).__init__(*args, **kwargs)
+
+
+class PreCareerCreateForm(forms.ModelForm):
+    class Meta:
+        model = TPreCareer
+        fields = ('role', 'start_date', 'end_date', 'exp_detail')
+
+
+class AssignExpCreateForm(forms.ModelForm):
+
+    class Meta:
+        model = TAssignExp
+        fields = ('role', 'start_date', 'end_date','project')
+
+    def __init__(self, *args, **kwargs):
+        super(AssignExpCreateForm, self).__init__(*args, **kwargs)
+        self.fields['project'].queryset = TProject.objects.all()
+
+
+class SignUpForm(UserCreationForm):
+    class Meta:
+        model = User
+        fields = (
+            'id',
+            'last_name',
+            'first_name',
+            'middle_name',
+            'birthday',
+            'dte',
+            'homeoffice',
+            'is_hr',
+            'password1',
+            'password2'
+        )
+
+
+    def __init__(self, *args, **kwargs):
+        super(SignUpForm, self).__init__(*args, **kwargs)
+        self.fields['dte'].queryset = MDte.objects.all()
+        self.fields['homeoffice'].queryset = MHomeoffice.objects.all()
+        self.fields['is_hr'].label = 'HRの方はチェック'
+
+
+class LoginFrom(AuthenticationForm):
+    class Meta:
+        model = User
+
+
+class SkillCreateForm(forms.ModelForm):
+    class Meta:
+        model = TSkill
+        fields = ('skill', 'updated_date')
+
+
+class DetailUpdateForm(forms.ModelForm):
+    class Meta:
+        model = User
+        fields = ('career_level', 'homeoffice', 'dte')
+
+
+    def __init__(self, *args, **kwargs):
+        super(DetailUpdateForm, self).__init__(*args, **kwargs)
+        self.fields['dte'].queryset = MDte.objects.all()
+        self.fields['homeoffice'].queryset = MHomeoffice.objects.all()
+        self.fields['career_level'].queryset = MCareerLevel.objects.all()

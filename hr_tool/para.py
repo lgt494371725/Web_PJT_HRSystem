@@ -55,9 +55,6 @@ def get_join_data():
     return df
 
 # key:[model, Field]
-
-
-
 def generate_mapping_dict():
     users = User.objects.order_by('pk').all()
     mapping_dict = {'birth_year': [User, list(

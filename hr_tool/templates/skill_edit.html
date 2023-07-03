@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h2>スキル編集画面</h2>
+<a href="{% url 'hr_tool:add_skill' pk %}">追加</a>
+
+<form action=""method="POST">
+<table class="table table-bordered">
+
+
+    
+    <thead> 
+    <tr>
+        <th>社員名</th>
+        <th>スキル名</th>
+        <th>更新日</th>
+    </tr>
+    </thead>
+    <tbody>
+        {% for skill in skill %}
+    <tr>
+        <td>{{skill.eid}}</td>
+        <td>{{skill.skill}}</td>
+        <td>{{skill.updated_date}}</td>
+        <td><a href="{% url 'hr_tool:update_skill' pk %}">更新</a></td>
+
+    </tr>
+    {% endfor %}
+    </tbody>
+</table>
+
+        
+    
+
+    
+
+
+{% endblock %}
+
+
+
+    

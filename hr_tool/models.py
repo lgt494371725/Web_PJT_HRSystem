@@ -1,5 +1,5 @@
 from django.db import models
-from django.contrib.auth.models import AbstractBaseUser
+from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin
 
 
 # マスタテーブルjoin_month
@@ -52,9 +52,52 @@ class MHomeoffice(models.Model):
     def __str__(self):
         return self.name
 
+class UserManager(BaseUserManager):
+
+    def create_user(self, id, password = None, **extra_fields):
+        if not id:
+            raise ValueError('Users must have an id')
+
+        import datetime
+        extra_fields.setdefault('birthday', datetime.date(1970, 1, 1))
+        extra_fields['join_of'] = datetime.date.today()
+        extra_fields['career_level'] = MCareerLevel.objects.filter(level=11)[0]
+
+        print(extra_fields)
+
+        user = self.model(
+            id = id,
+            **extra_fields
+        )
+
+        user.set_password(password)
+        user.save(using = self.db)
+
+        return user
+
+    def create_hruser(self, id, password):
+        user = self.create_user(
+            id = id
+        )
+        user.set_password(password)
+        user.is_hr = True
+        user.save(using=self._db)
+        return user
+
+    def create_superuser(self, id,last_name, password):
+        user = self.create_user(
+            id = id,
+            last_name = last_name,
+        )
+        user.set_password(password)
+        user.is_hr = True
+        user.save(using=self._db)
+        return user
+
+AUTH_USER_MODEL = 'hr_tool.User'
 
 # トランザクションテーブル
-class User(AbstractBaseUser):
+class User(AbstractBaseUser, PermissionsMixin):
     class Meta:
         db_table = 't_employee'
 
@@ -70,18 +113,22 @@ class User(AbstractBaseUser):
     homeoffice = models.ForeignKey(MHomeoffice, on_delete=models.PROTECT, to_field='id', related_name='user_homeoffice')
     dte = models.ForeignKey(MDte, on_delete=models.PROTECT, to_field='id', related_name='user_dte')
 
+    # TODO: 後で直す！！
+    is_staff = models.BooleanField('is_staff', default=True)
+    is_superuser = models.BooleanField('is_superuser', default=True)
+
     USERNAME_FIELD = 'id'
 
     def __str__(self):
         return f'{self.last_name} {self.first_name} ({self.id})'
 
-    # TODO: 認証機能
-    # password =
+    objects = UserManager()
+
 
 
 class TPreCareer(models.Model):
     id = models.AutoField('入社前経験id', primary_key=True)
-    eid = models.ForeignKey(User, verbose_name='社員番号', on_delete=models.CASCADE, to_field='id', related_name='t_pre_career_eid')
+    eid = models.ForeignKey(User, verbose_name='社員番号', on_delete=models.CASCADE, to_field='id', related_name='t_precareer_eid')
     role = models.CharField('ロール', max_length=64)
     start_date = models.DateField('開始日')
     end_date = models.DateField('終了日')
