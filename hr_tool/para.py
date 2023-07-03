@@ -66,8 +66,7 @@ def generate_mapping_dict():
                         users.annotate(birth_month=ExtractMonth('birthday')).values_list('birth_month',
                                                                                                 flat=True))],  #
                     'birth_year_month': [User, getYearMonth(users, 'birthday')],
-                    'management_level': [User, ['ML' + str(i) for i in
-                                                list(users.values_list('career_level__level', flat=True))]],
+                    'management_level': [User, list(users.values_list('career_level__level', flat=True))],
                     'home_office': [User, list(users.values_list('homeoffice__name', flat=True))],
                     'DTE': [User, list(users.values_list('dte__name', flat=True))],
                     'join_year': [User, list(

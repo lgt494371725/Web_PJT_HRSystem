@@ -12,7 +12,7 @@ from django.core.paginator import Paginator
 def employee_list(request):
     form = SearchForm(request.GET)
     employees = User.objects.all() 
-    print(form)
+    # print(form)
     if form.is_valid():
         query = form.cleaned_data['Search']
         employees = User.objects.all() 
@@ -36,7 +36,7 @@ def employee_list(request):
 
 def detail(request, pk):
     employee = get_object_or_404(User, id=pk)
-    print("get:", employee)
+    # print("get:", employee)
     eid = employee.first_name
     if employee.middle_name:
         eid += f'.{employee.middle_name}'
@@ -102,9 +102,9 @@ def analysis(request):
                 if agg_func == "count":
                     val = "number"
                     val_data = [1]*len(row_data)
-                print("row_data", row_data)
-                print("col_data", col_data)
-                print("val_data", val_data)
+                # print("row_data", row_data)
+                # print("col_data", col_data)
+                # print("val_data", val_data)
                 df = pd.DataFrame({row: row_data,
                                 col: col_data,
                                 val: val_data})
